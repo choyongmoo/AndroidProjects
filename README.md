@@ -61,5 +61,6 @@ crud
 네비게이션 기능을 어떻게 구현할지 알아봄
 
 만들고 나면 아래 이미지 처럼 나오지 않을까 예상
+
 <img width="374" alt="image" src="https://github.com/user-attachments/assets/045b9b43-1768-40b7-b271-1572bd93690a" />
 
