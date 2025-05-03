@@ -18,4 +18,5 @@ public class SampleController {
   public SampleDto getHello() {
     return sampleService.getMessage();
   }
+
 }

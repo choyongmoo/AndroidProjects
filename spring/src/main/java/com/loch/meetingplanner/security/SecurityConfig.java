@@ -28,8 +28,8 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/actuator/**").permitAll()
             .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/sample").permitAll() // 임시
-            .requestMatchers("/ws/sample").permitAll() // 임시
+            .requestMatchers("/api/sample/**").permitAll() // 임시
+            .requestMatchers("/ws/sample/**").permitAll() // 임시
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthenticationFilter,
             UsernamePasswordAuthenticationFilter.class);

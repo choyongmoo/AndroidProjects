@@ -13,12 +13,12 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
-public class SampleWebSocketHandler extends TextWebSocketHandler {
+public class SampleHandler extends TextWebSocketHandler {
 
   private final SampleService sampleService;
   private final Set<WebSocketSession> sessions = ConcurrentHashMap.newKeySet();
 
-  public SampleWebSocketHandler(SampleService sampleService) {
+  public SampleHandler(SampleService sampleService) {
     this.sampleService = sampleService;
 
     // 주기적으로 메시지 전송하는 스케줄러

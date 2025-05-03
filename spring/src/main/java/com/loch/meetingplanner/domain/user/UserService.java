@@ -13,7 +13,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserInfoResponse getUserByUsername(String username) {
+    public UserInfoResponse getUserInfoByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
 

@@ -21,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<UserInfoResponse> getUser(@PathVariable String username, Authentication authentication) {
+    public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable String username, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        UserInfoResponse userResponse = userService.getUserByUsername(username);
+        UserInfoResponse userResponse = userService.getUserInfoByUsername(username);
         return ResponseEntity.ok(userResponse);
     }
 
