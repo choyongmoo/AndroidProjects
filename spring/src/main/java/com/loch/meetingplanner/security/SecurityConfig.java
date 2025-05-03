@@ -26,6 +26,7 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable()) // REST API는 보통 비활성화
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/actuator/**").permitAll()
             .requestMatchers("/api/**").permitAll()
             .requestMatchers("/ws/**").permitAll() // WebSocket은 별도 처리
             .anyRequest().authenticated())

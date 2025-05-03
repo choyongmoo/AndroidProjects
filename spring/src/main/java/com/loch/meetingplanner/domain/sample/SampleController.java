@@ -14,7 +14,7 @@ public class SampleController {
     this.sampleService = sampleService;
   }
 
-  @GetMapping("/api/hello")
+  @GetMapping("/api/sample")
   public SampleDto getHello() {
     return sampleService.getHelloMessage();
   }
