@@ -13,9 +13,9 @@ public class SampleService {
     this.sampleRepository = sampleRepository;
   }
 
-  public SampleDto getHelloMessage() {
+  public SampleDto getMessage() {
     Sample sample = sampleRepository.findById(1L)
         .orElseThrow(() -> new IllegalArgumentException("데이터가 없습니다"));
-    return new SampleDto(sample.getHello());
+    return new SampleDto(sample.getMessage());
   }
 }

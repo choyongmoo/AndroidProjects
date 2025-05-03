@@ -18,12 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private static final List<String> WHITELIST = List.of(
-      "/api/hello",
-      "/api/users/login",
-      "/api/users/signup",
-      "/ws/");
-
   private final JwtTokenProvider jwtTokenProvider;
 
   public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
@@ -35,17 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       HttpServletResponse response,
       FilterChain filterChain)
       throws ServletException, IOException {
-    String path = request.getRequestURI();
-
-    // 화이트리스트에 포함된 경로는 필터 통과
-    if (WHITELIST.stream().anyMatch(path::startsWith)) {
-      filterChain.doFilter(request, response);
-      return;
-    }
 
     String token = resolveToken(request);
     if (token != null && jwtTokenProvider.validateToken(token)) {
-      String username = jwtTokenProvider.getUserId(token);
+      String username = jwtTokenProvider.getUsername(token);
       UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
           Collections.emptyList());
 

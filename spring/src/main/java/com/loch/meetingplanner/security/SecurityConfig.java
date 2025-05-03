@@ -24,11 +24,12 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .csrf(csrf -> csrf.disable()) // REST API는 보통 비활성화
+        .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/actuator/**").permitAll()
-            .requestMatchers("/api/**").permitAll()
-            .requestMatchers("/ws/**").permitAll() // WebSocket은 별도 처리
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/sample").permitAll() // 임시
+            .requestMatchers("/ws/sample").permitAll() // 임시
             .anyRequest().authenticated())
         .addFilterBefore(jwtAuthenticationFilter,
             UsernamePasswordAuthenticationFilter.class);

@@ -1,2 +1,1 @@
-DELETE FROM sample;
-INSERT INTO sample (id, hello) VALUES (1, 'hello world');
+INSERT INTO sample (id, message) VALUES (1, 'Hello World!');

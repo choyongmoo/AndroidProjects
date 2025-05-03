@@ -23,7 +23,7 @@ public class SampleWebSocketHandler extends TextWebSocketHandler {
 
     // 주기적으로 메시지 전송하는 스케줄러
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-      String message = sampleService.getHelloMessage().getHello();
+      String message = sampleService.getMessage().getMessage();
       sendMessageToAll(message);
     }, 0, 1, TimeUnit.SECONDS);
   }

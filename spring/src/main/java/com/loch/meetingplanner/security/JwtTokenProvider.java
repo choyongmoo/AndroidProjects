@@ -16,7 +16,7 @@ public class JwtTokenProvider {
   private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
   private final long expiration = 1000 * 60 * 60; // 1시간
 
-  public String createToken(String username) {
+  public String generateToken(String username) {
     return Jwts.builder()
         .setSubject(username)
         .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -24,7 +24,7 @@ public class JwtTokenProvider {
         .compact();
   }
 
-  public String getUserId(String token) {
+  public String getUsername(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(key)
         .build()

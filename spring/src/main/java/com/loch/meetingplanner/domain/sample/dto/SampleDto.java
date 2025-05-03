@@ -2,13 +2,13 @@ package com.loch.meetingplanner.domain.sample.dto;
 
 public class SampleDto {
 
-  private String hello;
+  private String message;
 
-  public SampleDto(String hello) {
-    this.hello = hello;
+  public SampleDto(String message) {
+    this.message = message;
   }
 
-  public String getHello() {
-    return hello;
+  public String getMessage() {
+    return message;
   }
 }

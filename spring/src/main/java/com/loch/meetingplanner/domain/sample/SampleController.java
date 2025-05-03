@@ -16,6 +16,6 @@ public class SampleController {
 
   @GetMapping("/api/sample")
   public SampleDto getHello() {
-    return sampleService.getHelloMessage();
+    return sampleService.getMessage();
   }
 }

@@ -9,7 +9,7 @@ public class Sample {
   @Id
   private Long id;
 
-  private String hello;
+  private String message;
 
   public Long getId() {
     return id;
@@ -19,11 +19,11 @@ public class Sample {
     this.id = id;
   }
 
-  public String getHello() {
-    return hello;
+  public String getMessage() {
+    return message;
   }
 
-  public void setHello(String hello) {
-    this.hello = hello;
+  public void setMessage(String message) {
+    this.message = message;
   }
 }
