@@ -10,7 +10,7 @@ spring:
       mode: always
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
 
 management:
   endpoints:

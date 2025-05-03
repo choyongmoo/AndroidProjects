@@ -1,4 +1,4 @@
-package com.loch.meeting_planner;
+package com.loch.meetingplanner;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
