@@ -23,7 +23,7 @@
             android:id="@+id/label1"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="이름"
+            android:text="@string/name"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
             android:id="@+id/label2"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:hint="이름 입력"
+            android:hint="@string/input_name"
             app:layout_constraintTop_toBottomOf="@id/label1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,13 +48,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:text="아이디"/>
+            android:text="@string/id"/>
 
         <EditText
             android:id="@+id/label4"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:hint="아이디 입력"
+            android:hint="@string/input_id"
             app:layout_constraintTop_toBottomOf="@id/label3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,13 +68,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:text="비밀번호"/>
+            android:text="@string/pw"/>
 
         <EditText
             android:id="@+id/label6"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:hint="비밀번호 입력"
+            android:hint="@string/input_pw"
             app:layout_constraintTop_toBottomOf="@id/label5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,13 +88,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:text="비밀번호 확인"/>
+            android:text="@string/check_pw"/>
 
         <EditText
             android:id="@+id/label8"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:hint="비밀번호 입력"
+            android:hint="@string/input_pw"
             app:layout_constraintTop_toBottomOf="@id/label7"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,13 +108,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"
-            android:text="이메일"/>
+            android:text="@string/email"/>
 
         <EditText
             android:id="@+id/label10"
             android:layout_width="300dp"
             android:layout_height="48dp"
-            android:hint="이메일 입력"
+            android:hint="@string/input_email"
             app:layout_constraintTop_toBottomOf="@id/label9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -127,7 +127,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.2"
-            android:text="가입하기"
+            android:text="@string/register_btn"
             />
 
         <Button
