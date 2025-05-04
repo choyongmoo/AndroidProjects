@@ -31,6 +31,7 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    // TODO: 로그인 및 회원가입 전역 예외 등록
     public void register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.username())) {
             throw new IllegalArgumentException("Username already exists");

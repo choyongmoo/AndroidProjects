@@ -22,7 +22,7 @@ public class SampleHandler extends TextWebSocketHandler {
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
       String message = sampleService.getMessage().getMessage();
       sendMessageToAll(message);
-    }, 0, 1, TimeUnit.SECONDS);
+    }, 0, 100, TimeUnit.MILLISECONDS);
   }
 
   @Override
