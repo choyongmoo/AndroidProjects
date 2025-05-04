@@ -59,11 +59,16 @@ public class LoginActivity extends AppCompatActivity {
             // 다이얼로그 보여주기
             dialog.show();
 
-            // 다이얼로그 내부에서 버튼 클릭 시 처리
+            // 다이얼로그 내부에서 버튼 클릭 시 처리 (이 부분 DB와 연동)
             Button registerButton = dialog.findViewById(R.id.register_btn); // register.xml에 있는 버튼 ID
             registerButton.setOnClickListener(v1 -> {
                 Toast.makeText(this, "회원가입 처리", Toast.LENGTH_SHORT).show();
                 dialog.dismiss(); // 다이얼로그 닫기
+            });
+            //취소시 다이얼로그 닫기
+            Button cancelButton = dialog.findViewById(R.id.cancel_btn);
+            cancelButton.setOnClickListener(v2 -> {
+                dialog.dismiss();
             });
         });
     }
