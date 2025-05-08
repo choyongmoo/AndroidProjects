@@ -1,5 +1,7 @@
 package com.loch.meetingplanner.domain.auth;
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -21,14 +25,15 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-    authService.register(request);
-    return ResponseEntity.ok("User registered successfully");
+  public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    LoginResponse response = authService.register(request);
+    URI location = URI.create("/api/users/" + response.username());
+    return ResponseEntity.created(location).body(response);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-    String token = authService.login(request);
-    return ResponseEntity.ok(new LoginResponse(token));
+  public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+    LoginResponse response = authService.login(request);
+    return ResponseEntity.ok(response);
   }
 }

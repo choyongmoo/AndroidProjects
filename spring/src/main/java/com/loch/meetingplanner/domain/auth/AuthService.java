@@ -8,10 +8,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
+import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
 import com.loch.meetingplanner.domain.user.User;
 import com.loch.meetingplanner.domain.user.UserRepository;
 import com.loch.meetingplanner.security.JwtTokenProvider;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
@@ -31,8 +34,8 @@ public class AuthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    // TODO: 로그인 및 회원가입 전역 예외 등록
-    public void register(RegisterRequest request) {
+    @Transactional
+    public LoginResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.username())) {
             throw new IllegalArgumentException("Username already exists");
         }
@@ -46,18 +49,23 @@ public class AuthService {
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
         userRepository.save(user);
+
+        String token = jwtTokenProvider.generateToken(user.getUsername());
+        return new LoginResponse(user.getUsername(), token);
     }
 
-    public String login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         try {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.username(), request.password()));
-            return jwtTokenProvider.generateToken(auth.getName());
+
+            String token = jwtTokenProvider.generateToken(auth.getName());
+            return new LoginResponse(auth.getName(), token);
         } catch (BadCredentialsException ex) {
             throw new IllegalArgumentException("Invalid username or password");
         } catch (Exception ex) {
-            throw new RuntimeException("Login failed: " + ex.getMessage());
+            throw new RuntimeException("Login failed");
         }
     }
 

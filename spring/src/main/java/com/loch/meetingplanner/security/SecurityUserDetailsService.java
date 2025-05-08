@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.domain.auth;
+package com.loch.meetingplanner.security;
 
 import java.util.ArrayList;
 
@@ -11,11 +11,11 @@ import com.loch.meetingplanner.domain.user.User;
 import com.loch.meetingplanner.domain.user.UserRepository;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class SecurityUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public SecurityUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
