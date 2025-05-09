@@ -33,25 +33,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        String token = resolveToken(request);
+        try {
+            String token = resolveToken(request);
 
-        if (token != null) {
-            if (!jwtTokenProvider.validateToken(token)) {
-                throw new JwtException("Invalid or expired JWT token");
+            if (token != null) {
+                if (!jwtTokenProvider.validateToken(token)) {
+                    throw new JwtException("Invalid or expired JWT token");
+                }
+
+                String username = jwtTokenProvider.getUsername(token);
+                User user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new NoSuchElementException("User not found for username: " + username));
+
+                SecurityUserDetails userDetails = new SecurityUserDetails(user);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
 
-            String username = jwtTokenProvider.getUsername(token);
-            User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new NoSuchElementException("User not found for username: " + username));
-
-            SecurityUserDetails userDetails = new SecurityUserDetails(user);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            filterChain.doFilter(request, response);
+        } catch (JwtException | NoSuchElementException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Authentication error: " + e.getMessage());
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
