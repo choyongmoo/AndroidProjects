@@ -20,7 +20,6 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 양방향 관계 필요 시 mappedBy로 설정 가능
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_created_by_user"))
     private User user;

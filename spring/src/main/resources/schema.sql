@@ -1,7 +1,4 @@
 -- PostgreSQL
-
-DROP TYPE IF EXISTS friend_status CASCADE;
-
 DROP TABLE IF EXISTS sample CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS places CASCADE;
@@ -13,9 +10,6 @@ DROP TABLE IF EXISTS group_members CASCADE;
 DROP TABLE IF EXISTS group_places CASCADE;
 DROP TABLE IF EXISTS live_locations CASCADE;
 DROP TABLE IF EXISTS penalties CASCADE;
-
--- ENUM: friend_status
-CREATE TYPE friend_status AS ENUM ('pending', 'accepted', 'blocked');
 
 -- TABLE: sample
 CREATE TABLE sample (
@@ -30,7 +24,9 @@ CREATE TABLE users (
     email         CHARACTER VARYING(100) NOT NULL UNIQUE,
     password_hash CHARACTER VARYING(255) NOT NULL,
     display_name  CHARACTER VARYING(100) NOT NULL,
-    created_at    TIMESTAMP DEFAULT NOW()
+    role          CHARACTER VARYING(50)  NOT NULL,
+    created_at    TIMESTAMP,
+    updated_at    TIMESTAMP
 );
 
 -- TABLE: places
@@ -78,11 +74,11 @@ CREATE TABLE arrival_logs (
 
 -- TABLE: friends
 CREATE TABLE friends (
-    id         BIGSERIAL       NOT NULL PRIMARY KEY,
-    user_id    BIGINT          NOT NULL,
-    friend_id  BIGINT          NOT NULL,
+    id         BIGSERIAL             NOT NULL PRIMARY KEY,
+    user_id    BIGINT                NOT NULL,
+    friend_id  BIGINT                NOT NULL,
     created_at TIMESTAMP,
-    status     friend_status   NOT NULL DEFAULT 'pending'::friend_status,
+    status     CHARACTER VARYING(50) NOT NULL,
     CONSTRAINT unique_friend_pair     UNIQUE (user_id, friend_id),
     CONSTRAINT fk_created_by_user     FOREIGN KEY (user_id)   REFERENCES users (id) NOT VALID,
     CONSTRAINT fk_created_by_friend   FOREIGN KEY (friend_id) REFERENCES users (id) NOT VALID

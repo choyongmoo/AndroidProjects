@@ -3,6 +3,7 @@ package com.loch.meetingplanner.domain.user.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,17 +20,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FriendService friendService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, FriendService friendService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public UserInfoResponse getUserInfoByUsername(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found: " + username));
-
-        return new UserInfoResponse(user.getUsername(), user.getEmail());
+        this.friendService = friendService;
     }
 
     public List<UserInfoResponse> getAllUsers() {
@@ -38,12 +34,31 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public void updateUser(String username, UpdateUserRequest request) {
+    public UserInfoResponse getUserByUsername(String username, User currentUser) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (request.email() != null) {
+        if (!user.getUsername().equals(currentUser.getUsername())
+                && !friendService.areFriends(user, currentUser)) {
+            throw new AccessDeniedException("You are not allowed to view this user's information");
+        }
+
+        return new UserInfoResponse(user.getUsername(), user.getEmail());
+    }
+
+    @Transactional
+    public void updateUser(String username, UpdateUserRequest request, User currentUser) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!user.getUsername().equals(currentUser.getUsername())) {
+            throw new AccessDeniedException("You are not allowed to modify this user");
+        }
+
+        if (request.email() != null && !request.email().equals(user.getEmail())) {
+            if (userRepository.existsByEmail(request.email())) {
+                throw new IllegalArgumentException("Email already in use");
+            }
             user.setEmail(request.email());
         }
 
@@ -51,13 +66,17 @@ public class UserService {
             user.setPasswordHash(passwordEncoder.encode(request.password()));
         }
 
-        userRepository.save(user); // 변경사항 반영
+        userRepository.save(user);
     }
 
     @Transactional
-    public void deleteUser(String username) {
+    public void deleteUser(String username, User currentUser) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!user.getUsername().equals(currentUser.getUsername())) {
+            throw new AccessDeniedException("You are not allowed to modify this user");
+        }
 
         userRepository.delete(user);
     }

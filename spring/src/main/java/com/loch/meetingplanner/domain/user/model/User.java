@@ -29,11 +29,29 @@ public class User {
     @Column(name = "display_name", length = 100, nullable = false)
     private String displayName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @PrePersist
     public void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        if (createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+
+        if (role == null) {
+            this.role = Role.USER;
+        }
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -4,10 +4,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.loch.meetingplanner.config.security.JwtTokenProvider;
+import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
@@ -48,9 +50,10 @@ public class AuthService {
         user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
+        user.setDisplayName(request.displayName());
         userRepository.save(user);
 
-        String token = jwtTokenProvider.generateToken(user.getUsername());
+        String token = jwtTokenProvider.generateToken(user);
         return new LoginResponse(user.getUsername(), token);
     }
 
@@ -60,8 +63,14 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             request.username(), request.password()));
 
-            String accessToken = jwtTokenProvider.generateToken(auth.getName());
-            return new LoginResponse(auth.getName(), accessToken);
+            // SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            // 사용자 정보 가져오기
+            SecurityUserDetails userDetails = (SecurityUserDetails) auth.getPrincipal();
+
+            String token = jwtTokenProvider.generateToken(userDetails);
+            return new LoginResponse(auth.getName(), token);
         } catch (BadCredentialsException ex) {
             throw new IllegalArgumentException("Invalid username or password");
         } catch (Exception ex) {

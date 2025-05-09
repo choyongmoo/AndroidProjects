@@ -25,14 +25,14 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+  public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
     LoginResponse response = authService.register(request);
     URI location = URI.create("/api/users/" + response.username());
     return ResponseEntity.created(location).body(response);
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+  public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
     LoginResponse response = authService.login(request);
     return ResponseEntity.ok(response);
   }
