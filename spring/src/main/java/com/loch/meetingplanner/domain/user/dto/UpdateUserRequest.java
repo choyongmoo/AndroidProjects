@@ -1,4 +1,12 @@
 package com.loch.meetingplanner.domain.user.dto;
 
-public record UpdateUserRequest(String username, String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateUserRequest(
+
+        @NotBlank String email,
+
+        @NotBlank String password,
+
+        @NotBlank String displayName) {
 }

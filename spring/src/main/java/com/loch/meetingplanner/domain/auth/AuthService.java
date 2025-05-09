@@ -4,7 +4,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +38,11 @@ public class AuthService {
     @Transactional
     public LoginResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.username())) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("Username already exists: " + request.username());
         }
 
         if (userRepository.existsByEmail(request.email())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new IllegalArgumentException("Email already exists: " + request.email());
         }
 
         User user = new User();
@@ -51,6 +50,7 @@ public class AuthService {
         user.setEmail(request.email());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setDisplayName(request.displayName());
+
         userRepository.save(user);
 
         String token = jwtTokenProvider.generateToken(user);
@@ -63,19 +63,15 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             request.username(), request.password()));
 
-            // SecurityContext에 저장
-            SecurityContextHolder.getContext().setAuthentication(auth);
-
-            // 사용자 정보 가져오기
             SecurityUserDetails userDetails = (SecurityUserDetails) auth.getPrincipal();
+            String token = jwtTokenProvider.generateToken(userDetails.getUser());
 
-            String token = jwtTokenProvider.generateToken(userDetails);
             return new LoginResponse(auth.getName(), token);
-        } catch (BadCredentialsException ex) {
+
+        } catch (BadCredentialsException e) {
             throw new IllegalArgumentException("Invalid username or password");
-        } catch (Exception ex) {
-            throw new RuntimeException("Login failed");
+        } catch (Exception e) {
+            throw new RuntimeException("Login failed due to an internal error");
         }
     }
-
 }

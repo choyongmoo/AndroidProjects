@@ -4,5 +4,5 @@ public record LoginResponse(
 
         String username,
 
-        String accessToken) {
+        String token) {
 }

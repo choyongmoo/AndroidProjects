@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
-import com.loch.meetingplanner.domain.user.dto.UserInfoResponse;
+import com.loch.meetingplanner.domain.user.dto.GetUserResponse;
 import com.loch.meetingplanner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
-@PreAuthorize("hasRole('USER')")
 public class UserController {
 
     private final UserService userService;
@@ -31,27 +30,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 1. 사용자 전체 조회
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserInfoResponse>> getAllUsers(
+    public ResponseEntity<List<GetUserResponse>> getAllUsers(
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
 
-        List<UserInfoResponse> users = userService.getAllUsers();
+        List<GetUserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
-    // 2. 사용자 단건 조회
     @GetMapping("/{username}")
-    public ResponseEntity<UserInfoResponse> getUser(
+    public ResponseEntity<GetUserResponse> getUser(
             @PathVariable String username,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
 
-        UserInfoResponse userResponse = userService.getUserByUsername(username, currentUser.getUser());
+        GetUserResponse userResponse = userService.getUserByUsername(username, currentUser.getUser());
         return ResponseEntity.ok(userResponse);
     }
 
-    // 3. 사용자 전체 수정
     @PutMapping("/{username}")
     public ResponseEntity<Void> updateUser(
             @PathVariable String username,
@@ -62,7 +58,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    // 4. 사용자 삭제
     @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteUser(
             @PathVariable String username,

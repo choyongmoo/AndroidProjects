@@ -1,5 +1,6 @@
 package com.loch.meetingplanner.config.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,8 +21,14 @@ public class SecurityUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(
-                new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+
+        if (user.getRole() == Role.ADMIN) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
+        return authorities;
     }
 
     @Override
@@ -57,9 +64,4 @@ public class SecurityUserDetails implements UserDetails {
     public User getUser() {
         return user;
     }
-
-    public Role getRole() {
-        return user.getRole();
-    }
-
 }
