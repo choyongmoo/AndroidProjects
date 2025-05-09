@@ -25,12 +25,12 @@ CREATE TABLE sample (
 
 -- TABLE: users
 CREATE TABLE users (
-    id         BIGSERIAL              NOT NULL PRIMARY KEY,
-    username   CHARACTER VARYING(100) NOT NULL UNIQUE,
-    email      CHARACTER VARYING(100) NOT NULL UNIQUE,
-    password   CHARACTER VARYING(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at  TIMESTAMP
+    id            BIGSERIAL              NOT NULL PRIMARY KEY,
+    username      CHARACTER VARYING(100) NOT NULL UNIQUE,
+    email         CHARACTER VARYING(100) NOT NULL UNIQUE,
+    password_hash CHARACTER VARYING(255) NOT NULL,
+    display_name  CHARACTER VARYING(100) NOT NULL,
+    created_at    TIMESTAMP DEFAULT NOW()
 );
 
 -- TABLE: places
@@ -124,7 +124,6 @@ CREATE TABLE penalties (
     appointment_id BIGINT    NOT NULL,
     payer_id       BIGINT    NOT NULL,
     amount         INTEGER   NOT NULL,
-    receiver_ids   JSON      NOT NULL,
     CONSTRAINT fk_penalties_appointments FOREIGN KEY (appointment_id) REFERENCES appointments (id),
     CONSTRAINT fk_penalties_users        FOREIGN KEY (payer_id)       REFERENCES users (id)
 );

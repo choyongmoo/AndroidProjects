@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.exception;
+package com.loch.meetingplanner.common.exception;
 
 public class SampleException extends RuntimeException {
     public SampleException(String message) {

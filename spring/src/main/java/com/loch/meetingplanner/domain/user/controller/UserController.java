@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.domain.user;
+package com.loch.meetingplanner.domain.user.controller;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.UserInfoResponse;
+import com.loch.meetingplanner.domain.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")

@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.security;
+package com.loch.meetingplanner.config.security;
 
 import java.security.Key;
 import java.util.Date;

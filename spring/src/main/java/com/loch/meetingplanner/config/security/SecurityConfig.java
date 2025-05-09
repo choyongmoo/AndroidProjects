@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.security;
+package com.loch.meetingplanner.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

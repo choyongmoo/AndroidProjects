@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.domain.user;
+package com.loch.meetingplanner.domain.user.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.UserInfoResponse;
+import com.loch.meetingplanner.domain.user.model.User;
+import com.loch.meetingplanner.domain.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -46,7 +48,7 @@ public class UserService {
         }
 
         if (request.password() != null && !request.password().isBlank()) {
-            user.setPassword(passwordEncoder.encode(request.password()));
+            user.setPasswordHash(passwordEncoder.encode(request.password()));
         }
 
         userRepository.save(user); // 변경사항 반영

@@ -7,12 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.loch.meetingplanner.config.security.JwtTokenProvider;
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
-import com.loch.meetingplanner.domain.user.User;
-import com.loch.meetingplanner.domain.user.UserRepository;
-import com.loch.meetingplanner.security.JwtTokenProvider;
+import com.loch.meetingplanner.domain.user.model.User;
+import com.loch.meetingplanner.domain.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -47,7 +47,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.username());
         user.setEmail(request.email());
-        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setPasswordHash(passwordEncoder.encode(request.password()));
         userRepository.save(user);
 
         String token = jwtTokenProvider.generateToken(user.getUsername());
@@ -60,8 +60,8 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(
                             request.username(), request.password()));
 
-            String token = jwtTokenProvider.generateToken(auth.getName());
-            return new LoginResponse(auth.getName(), token);
+            String accessToken = jwtTokenProvider.generateToken(auth.getName());
+            return new LoginResponse(auth.getName(), accessToken);
         } catch (BadCredentialsException ex) {
             throw new IllegalArgumentException("Invalid username or password");
         } catch (Exception ex) {

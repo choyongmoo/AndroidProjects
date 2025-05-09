@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.exception;
+package com.loch.meetingplanner.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
