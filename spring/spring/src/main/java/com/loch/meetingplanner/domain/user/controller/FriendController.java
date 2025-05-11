@@ -13,6 +13,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/friends")
@@ -41,6 +44,7 @@ public class FriendController {
     }
 
     // 3. 친구 요청 거절
+    @PostMapping("/reject")
     public ResponseEntity<Void> rejectRequest(@Valid @RequestBody FriendRequest request,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
         friendService.rejectFriendRequest(currentUser.getUser(), request.targetUsername());

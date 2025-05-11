@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "UserGroup")
 @Table(name = "groups")
 @Getter
 @Setter
