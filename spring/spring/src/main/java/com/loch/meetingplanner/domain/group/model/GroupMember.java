@@ -4,7 +4,7 @@ import com.loch.meetingplanner.domain.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
+@Entity(name = "GroupMemberA")
 @Table(name = "group_members", uniqueConstraints = {
         @UniqueConstraint(columnNames = { "group_id", "user_id" }, name = "unique_group_member")
 })

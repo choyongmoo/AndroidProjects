@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS group_places CASCADE;
 DROP TABLE IF EXISTS live_locations CASCADE;
 DROP TABLE IF EXISTS penalties CASCADE;
 
+
 -- TABLE: sample
 CREATE TABLE sample (
     id      BIGSERIAL    PRIMARY KEY,
