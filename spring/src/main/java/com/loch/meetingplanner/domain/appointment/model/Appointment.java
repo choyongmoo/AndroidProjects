@@ -1,6 +1,6 @@
 package com.loch.meetingplanner.domain.appointment.model;
 
-import com.loch.meetingplanner.domain.group.model.Group;
+import com.loch.meetingplanner.domain.user.model.Group;
 import com.loch.meetingplanner.domain.group.model.Place;
 import com.loch.meetingplanner.domain.user.model.User;
 import jakarta.persistence.*;
