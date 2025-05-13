@@ -13,13 +13,13 @@ import com.loch.meetingplanner.domain.appointment.model.Appointment;
 import com.loch.meetingplanner.domain.appointment.model.ArrivalLog;
 import com.loch.meetingplanner.domain.appointment.repository.AppointmentRepository;
 import com.loch.meetingplanner.domain.appointment.repository.ArrivalLogRepository;
+import com.loch.meetingplanner.domain.group.model.Group;
 import com.loch.meetingplanner.domain.group.model.Place;
+import com.loch.meetingplanner.domain.group.repository.GroupMemberRepository;
 import com.loch.meetingplanner.domain.group.repository.GroupPlaceRepository;
+import com.loch.meetingplanner.domain.group.repository.GroupRepository;
 import com.loch.meetingplanner.domain.group.repository.PlaceRepository;
-import com.loch.meetingplanner.domain.user.model.Group;
 import com.loch.meetingplanner.domain.user.model.User;
-import com.loch.meetingplanner.domain.user.repository.GroupMemberRepository;
-import com.loch.meetingplanner.domain.user.repository.GroupRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -80,6 +80,8 @@ public class AppointmentService {
         }
 
         Appointment appointment = new Appointment();
+        appointment.setTitle(request.title());
+        appointment.setPenalty(request.penalty());
         appointment.setGroup(group);
         appointment.setPlace(place);
         appointment.setTime(request.time());
@@ -88,6 +90,49 @@ public class AppointmentService {
 
         Appointment saved = appointmentRepository.save(appointment);
         return toResponse(saved);
+    }
+
+    public void updateAppointment(Long id, AppointmentRequest request, User user) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (!isGroupMember(user, appointment.getGroup())) {
+            throw new AccessDeniedException("User is not a member of the group");
+        }
+
+        Place place = placeRepository.findById(Long.parseLong(request.placeId()))
+                .orElseThrow(() -> new EntityNotFoundException("Place not found"));
+
+        if (!groupPlaceRepository.existsByGroupAndPlace(appointment.getGroup(), place)) {
+            throw new IllegalArgumentException("Place is not registered in the group");
+        }
+
+        appointment.setTitle(request.title());
+        appointment.setPenalty(request.penalty());
+        appointment.setPlace(place);
+        appointment.setTime(request.time());
+
+        appointmentRepository.save(appointment);
+    }
+
+    public void deleteAppointment(Long id, User user) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+
+        if (!isGroupMember(user, appointment.getGroup())) {
+            throw new AccessDeniedException("User is not a member of the group");
+        }
+
+        appointmentRepository.delete(appointment);
+    }
+
+    public List<ArrivalLog> getArrivalLogs(Long appointmentId, User user) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
+        if (!isGroupMember(user, appointment.getGroup())) {
+            throw new AccessDeniedException("User is not a member of the group");
+        }
+        return arrivalLogRepository.findByAppointment(appointment);
     }
 
     public void recordArrival(Long appointmentId, User user) {
@@ -112,17 +157,6 @@ public class AppointmentService {
         log.setIsLate(isLate);
 
         arrivalLogRepository.save(log);
-    }
-
-    public void deleteAppointment(Long id, User user) {
-        Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Appointment not found"));
-
-        if (!isGroupMember(user, appointment.getGroup())) {
-            throw new AccessDeniedException("User is not a member of the group");
-        }
-
-        appointmentRepository.delete(appointment);
     }
 
     private boolean isGroupMember(User user, Group group) {

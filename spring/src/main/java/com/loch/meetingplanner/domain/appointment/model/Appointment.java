@@ -1,6 +1,6 @@
 package com.loch.meetingplanner.domain.appointment.model;
 
-import com.loch.meetingplanner.domain.user.model.Group;
+import com.loch.meetingplanner.domain.group.model.Group;
 import com.loch.meetingplanner.domain.group.model.Place;
 import com.loch.meetingplanner.domain.user.model.User;
 import jakarta.persistence.*;
@@ -20,6 +20,12 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "title", length = 200, nullable = false)
+    private String title;
+
+    @Column(name = "penalty", nullable = false)
+    private Integer penalty;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_appointments_groups"))

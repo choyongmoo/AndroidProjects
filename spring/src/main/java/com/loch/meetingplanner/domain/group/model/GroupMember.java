@@ -1,29 +1,27 @@
 package com.loch.meetingplanner.domain.group.model;
 
 import com.loch.meetingplanner.domain.user.model.User;
-import jakarta.persistence.*;
-import lombok.*;
 
-@Entity(name = "GroupMemberA")
-@Table(name = "group_members", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "group_id", "user_id" }, name = "unique_group_member")
-})
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Entity
+@Data
+@Table(name = "group_members")
 public class GroupMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id", nullable = false, foreignKey = @ForeignKey(name = "fk_group_members_groups"))
+    @ManyToOne
     private Group group;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_group_members_users"))
+    @ManyToOne
     private User user;
 }

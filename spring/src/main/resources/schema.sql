@@ -50,10 +50,12 @@ CREATE TABLE groups (
 
 -- TABLE: appointments
 CREATE TABLE appointments (
-    id         BIGSERIAL NOT NULL PRIMARY KEY,
-    group_id   BIGINT    NOT NULL,
-    place_id   BIGINT    NOT NULL,
-    "time"     TIMESTAMP NOT NULL,
+    id         BIGSERIAL              NOT NULL PRIMARY KEY,
+    title      CHARACTER VARYING(200) NOT NULL,
+    penalty    INTEGER                NOT NULL,
+    group_id   BIGINT                 NOT NULL,
+    place_id   BIGINT                 NOT NULL,
+    "time"     TIMESTAMP              NOT NULL,
     created_by BIGINT,
     created_at TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_appointments_groups   FOREIGN KEY (group_id) REFERENCES groups (id),

@@ -1,4 +1,4 @@
-package com.loch.meetingplanner.domain.user.repository;
+package com.loch.meetingplanner.domain.group.repository;
 
 import java.util.List;
 
@@ -7,9 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.loch.meetingplanner.domain.group.model.Place;
-import com.loch.meetingplanner.domain.user.model.Group;
-import com.loch.meetingplanner.domain.user.model.GroupMember;
+import com.loch.meetingplanner.domain.group.model.Group;
+import com.loch.meetingplanner.domain.group.model.GroupMember;
 import com.loch.meetingplanner.domain.user.model.User;
 
 @Repository

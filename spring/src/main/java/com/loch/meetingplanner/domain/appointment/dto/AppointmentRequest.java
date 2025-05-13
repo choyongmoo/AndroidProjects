@@ -6,6 +6,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AppointmentRequest(
 
+        @NotBlank String title,
+
+        @NotBlank Integer penalty,
+
         @NotBlank String groupId,
 
         @NotBlank String placeId,
