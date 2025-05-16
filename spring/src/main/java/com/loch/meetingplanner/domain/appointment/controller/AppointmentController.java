@@ -94,4 +94,11 @@ public class AppointmentController {
         appointmentService.recordArrival(id, currentUser.getUser());
         return ResponseEntity.ok().build();
     }
+
+    //그룹 약속 목록 조회
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<List<AppointmentResponse>> getAppointmentsByGroup(@PathVariable Long groupId) {
+        List<AppointmentResponse> appointments = appointmentService.getAppointmentsByGroupId(groupId);
+        return ResponseEntity.ok(appointments);
+    }
 }

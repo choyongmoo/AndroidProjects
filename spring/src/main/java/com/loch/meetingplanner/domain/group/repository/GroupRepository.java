@@ -18,4 +18,5 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     // 이 유저가 만든 그룹을 보여줌
     List<Group> findByCreatedBy(User user);
 
+    
 }

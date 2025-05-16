@@ -172,4 +172,19 @@ public class AppointmentService {
                 appointment.getCreatedBy().getId().toString(),
                 appointment.getCreatedAt());
     }
+
+    //그룹 약속 목록 조회
+    public List<AppointmentResponse> getAppointmentsByGroupId(Long groupId) {
+        return appointmentRepository.findByGroupId(groupId).stream()
+            .map(appointment -> new AppointmentResponse(
+                appointment.getId(),
+                String.valueOf(appointment.getGroup().getId()),
+                String.valueOf(appointment.getPlace().getId()),
+                appointment.getTime(),
+                String.valueOf(appointment.getCreatedBy().getId()),
+                appointment.getCreatedAt()
+            ))
+            .toList();
+    }
+
 }
