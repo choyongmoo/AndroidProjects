@@ -115,13 +115,3 @@ CREATE TABLE live_locations (
     update_at  TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_live_locations_users FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
--- TABLE: penalties
-CREATE TABLE penalties (
-    id             BIGSERIAL NOT NULL PRIMARY KEY,
-    appointment_id BIGINT    NOT NULL,
-    payer_id       BIGINT    NOT NULL,
-    amount         INTEGER   NOT NULL,
-    CONSTRAINT fk_penalties_appointments FOREIGN KEY (appointment_id) REFERENCES appointments (id),
-    CONSTRAINT fk_penalties_users        FOREIGN KEY (payer_id)       REFERENCES users (id)
-);
