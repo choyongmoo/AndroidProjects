@@ -109,8 +109,7 @@ CREATE TABLE group_places (
 
 -- TABLE: live_locations
 CREATE TABLE live_locations (
-    id         BIGSERIAL        NOT NULL PRIMARY KEY,
-    user_id    BIGINT           NOT NULL UNIQUE,
+    user_id    BIGINT           NOT NULL PRIMARY KEY,
     lat        DOUBLE PRECISION NOT NULL,
     lng        DOUBLE PRECISION NOT NULL,
     update_at  TIMESTAMP DEFAULT NOW(),

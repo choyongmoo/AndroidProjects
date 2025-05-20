@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.GetUserResponse;
+import com.loch.meetingplanner.domain.user.dto.UpdateLocationRequest;
 import com.loch.meetingplanner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -65,5 +67,15 @@ public class UserController {
 
         userService.deleteUser(username, currentUser.getUser());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{username}/location")
+    public ResponseEntity<Void> updateUserLocation(
+            @PathVariable String username,
+            @RequestBody UpdateLocationRequest request,
+            @AuthenticationPrincipal SecurityUserDetails currentUser) {
+
+        userService.updateUserLocation(username, request, currentUser.getUser());
+        return ResponseEntity.ok().build();
     }
 }
