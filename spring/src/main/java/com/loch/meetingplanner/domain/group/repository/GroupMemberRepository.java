@@ -20,4 +20,7 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
 
     boolean existsByGroupAndUser(Group group, User user);
 
+    //특정 그룹에 속한 사용자들 가져오는 기능 담당
+    @Query("SELECT gm.user FROM GroupMember gm WHERE gm.group.id = :groupId")
+    List<User> findUsersByGroupId(@Param("groupId") Long groupId);
 }

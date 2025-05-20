@@ -29,6 +29,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
+    
 
     public GroupService(
         GroupRepository groupRepository,
