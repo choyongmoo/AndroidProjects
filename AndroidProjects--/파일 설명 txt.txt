@@ -1,0 +1,128 @@
+---------- 약속 생성 화면 UI
+
+1. create_meeting.xml
+
+--> 약속을 만들기 위한 UI 화면 구성 (제목/날짜/시간/장소/상금방식 선택 등)
+
+2. CreateMeetingActivity.java
+
+--> 약속 생성 화면을 띄워주는 액티비티 (지도 구현 못함, 하다가 실패)
+
+
+3. CreateMeetingActivity.java
+
+--> 약속 생성 화면을 띄워주는 액티비티 (지도 구현 못함, 하다가 실패)
+
+------------- 약속 목록 화면 UI
+
+1. meeting_list.xml
+
+--> RecyclerView 하나만 들어있는 레이아웃
+
+2. item_meeting.xml
+
+--> 약속 하나가 카드처럼 보이는 UI
+
+4. MeetingListActivity
+
+--> 전체 약속 목록을 보여주는 액티비티 (화면)
+
+5. Meeting 클래스
+
+--> 	약속 하나에 들어갈 정보 (제목, 시간, 장소)
+
+6. MeetingAdapter
+
+--> 데이터를 카드 모양으로 화면에 넣어주는 중간 관리자 (RecyclerView 전용 어댑터)
+
+----------------->> 설명
+
+전체 흐름 구조 
+
+[MeetingListActivity] 
+    ↓ onCreate()
+    → [meeting_list.xml] 화면에 보여줌
+    → [MeetingAdapter]를 통해 RecyclerView 구성
+        ↓
+        [item_meeting.xml]을 한 줄 카드로 사용
+        → 데이터 하나마다 카드 하나씩 만들어줌
+
+--> MeetingListActivity에서 ArrayList<Meeting>에 가짜 약속 데이터 2~3개 넣음
+
+MeetingAdapter가 RecyclerView에 연결됨
+
+Adapter가 데이터 하나씩 꺼냄 → item_meeting.xml 카드에 끼워 넣음
+
+사용자 눈에는 카드들이 리스트로 보여짐
+
+
+
+------------ 친구 목록 UI
+
+약속 목록이랑 구조는 똑같이 RecyclerView로 카드 형태로 보여주는 구조
+UI만 만드니 가짜 친구 데이터만 화면에 보여줌,  더미(가짜) 친구 데이터로만 UI 구성
+
+
+1. FriendListActivity.java
+
+--> 친구 목록을 보여주는 전체 화면 액티비티
+
+2. friend_list.xml
+
+--> RecyclerView로 친구 리스트 보여주는 레이아웃
+
+3. item_friend.xml
+
+--> 친구 한 명을 카드로 표현하는 UI
+
+4. Friend.java
+
+--> 	친구 정보를 담는 데이터 클래스 
+
+5. FriendAdapter.java
+
+--> RecyclerView 어댑터. 친구 데이터를 카드뷰로 꽂아주는 클래스
+
+------------------------ 지도 보기(일단 실패)
+
+현재 위치 표시-> 기능 구현 (GPS 권한 + 위치 요청 + 지도 마커 표시 필요)	
+Google Maps API 연동은 기능 구현 범위
+
+1.지도 UI 틀, 버튼
+2.현재 위치 가져오기 (GPS)
+3.지도에 현재 위치 마커 띄우기
+
+--------------- ui 만든 것들
+
+1. mypage.xml	 --> 사용자 정보 + 로그아웃
+2.add_friend.xml    --> 	친구 이름/이메일 입력 후 추가
+3. meeting_detail.xml --> 	약속 상세 정보 확인 화면
+4.ranking_list.xml, item_ranking.xml --> 랭킹/도착순위 리스트	
+5. group_list.xml, item_group.xml --> 그룹 목록 리스트 (둘 다 RecyclerView 구조로 맞춰놨으니 언제든지 Java로 붙일 수 있음)
+6. create_group.xml	 --> 	그룹 생성 ui, 그룹 이름 입력 → 생성 버튼 UI만 구성
+7. group_detail.xml	--> 그룹 이름 + 현재 그룹 멤버 리스트 + "친구 추가" 버튼
+8. add_group_member.xml-->친구들 리스트 보여주고 체크해서 그룹에 추가하는 화면
+
+
+
+------------------------  설명
+
+RecyclerView 구조
+--> 리스트 형태로 화면에 여러 데이터를 반복해서 보여주는 구조
+
+예:
+친구 목록
+약속 목록
+도착 순위
+그룹 목록
+
+-------------동작 흐름 (그림처럼 생각)
+
+[Activity/Fragment]         ← 화면 전체
+    ↓
+[RecyclerView]              ← 목록 틀 (리스트 공간)
+    ↓
+[Adapter]                   ← 데이터 배열을 화면에 꽂아줌
+    ↓
+[item XML]                  ← 하나하나의 카드 디자인
+

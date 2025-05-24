@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 친구 선택 목록 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendSelectRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- 추가 버튼 -->
+    <Button
+        android:id="@+id/btnAddToGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹에 추가" />
+</LinearLayout>

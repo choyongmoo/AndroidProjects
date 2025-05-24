@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 그룹 이름 입력 -->
+    <EditText
+        android:id="@+id/etGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="그룹 이름"
+        android:layout_marginBottom="24dp" />
+
+    <!-- 그룹 생성 버튼 -->
+    <Button
+        android:id="@+id/btnGroupCreate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹 생성" />
+
+</LinearLayout>
