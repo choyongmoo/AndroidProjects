@@ -19,7 +19,7 @@ public class GroupLocationController {
     
     private final GroupLocationService groupLocationService;
 
-    @GetMapping("/{groupId}/locations")
+    @GetMapping("/{groupId}/locations") //해당 그룹에 속한 모든 멤버의 위치 정보 조회
     public List<GroupMemberLocationResponse> getGroupLocations(@PathVariable Long groupId) {
         return groupLocationService.getGroupMembersLocation(groupId);
     }
