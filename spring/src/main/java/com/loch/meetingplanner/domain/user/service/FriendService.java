@@ -74,7 +74,7 @@ public class FriendService {
                 .stream()
                 .map(f -> {
                     User friend = f.getFriend();
-                    return new GetUserResponse(friend.getUsername(), friend.getDisplayName(), friend.getEmail(),
+                    return new GetUserResponse(friend.getUsername(), friend.getDisplayName(),friend.getProfileImageUrl(), friend.getEmail(),
                             friend.getCreatedAt(), friend.getUpdatedAt());
                 })
                 .toList();

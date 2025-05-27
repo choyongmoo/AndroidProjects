@@ -10,6 +10,9 @@ public record GetUserResponse(
 
         String displayName,
 
+        //이거 추가해줬어~~
+        String profileImageUrl, 
+
         LocalDateTime createdAt,
 
         LocalDateTime updatedAt) {

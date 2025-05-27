@@ -8,5 +8,8 @@ public record UpdateUserRequest(
 
         @NotBlank String password,
 
-        @NotBlank String displayName) {
+        @NotBlank String displayName,
+        
+        //이거 추가해줬어~~
+        String profileImageUrl) {
 }

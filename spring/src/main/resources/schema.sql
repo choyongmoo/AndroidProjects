@@ -27,7 +27,8 @@ CREATE TABLE users (
     display_name  CHARACTER VARYING(100) NOT NULL,
     role          CHARACTER VARYING(50)  NOT NULL,
     created_at    TIMESTAMP,
-    updated_at    TIMESTAMP
+    updated_at    TIMESTAMP,
+    profile_image_url  CHARACTER VARYING(500) --현성아 이거 추가했어 확인해줘 이거 프로필 이미지를 url로 저장해주는거야
 );
 
 -- TABLE: places

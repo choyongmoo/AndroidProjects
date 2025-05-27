@@ -17,6 +17,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //이거 추가했어~
+    @Column(name = "profile_image_url", length = 500)
+    private String profileImageUrl;
+
     @Column(length = 100, nullable = false, unique = true)
     private String username;
 

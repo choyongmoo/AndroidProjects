@@ -42,6 +42,7 @@ public class UserService {
                         user.getUsername(),
                         user.getEmail(),
                         user.getDisplayName(),
+                        user.getProfileImageUrl(),
                         user.getCreatedAt(),
                         user.getUpdatedAt()))
                 .collect(Collectors.toList());
@@ -62,6 +63,7 @@ public class UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getDisplayName(),
+                user.getProfileImageUrl(),
                 user.getCreatedAt(),
                 user.getUpdatedAt());
     }
@@ -91,6 +93,12 @@ public class UserService {
         String newDisplayName = request.displayName();
         if (newDisplayName != null && !newDisplayName.isBlank()) {
             user.setDisplayName(newDisplayName);
+        }
+
+        //이거 추가해줬어~~
+        String newProfileImageUrl = request.profileImageUrl();
+        if (newProfileImageUrl != null && !newProfileImageUrl.isBlank()) {
+            user.setProfileImageUrl(newProfileImageUrl);
         }
 
         userRepository.save(user);
