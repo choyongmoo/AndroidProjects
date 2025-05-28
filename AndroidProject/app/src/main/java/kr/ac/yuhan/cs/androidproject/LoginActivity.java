@@ -3,6 +3,7 @@ package kr.ac.yuhan.cs.androidproject;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,46 +35,87 @@ public class LoginActivity extends AppCompatActivity {
 
         // 로그인 버튼 클릭 시
         loginButton.setOnClickListener(v -> {
-            String id = uidEditText.getText().toString();
-            String pw = upwEditText.getText().toString();
+            String username = uidEditText.getText().toString();
+            String password = upwEditText.getText().toString();
 
-            // 간단한 예시: 아이디/비번이 "admin" / "1234"일 때만 로그인 성공
-            if (id.equals("admin") && pw.equals("1234")) {
-                Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show();
+            LoginRequest loginRequest = new LoginRequest(username, password);
 
-                // MainActivity로 이동
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish(); // 로그인 액티비티 종료
-            } else {
-                Toast.makeText(this, "아이디 또는 비밀번호가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-            }
+            RetrofitClient.getApiService().login(loginRequest).enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Toast.makeText(LoginActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+
+                        String loggedInUsername = response.body().getUsername(); // 또는 getDisplayName()
+
+                        // SharedPreferences에 저장
+                        getSharedPreferences("MyAppPrefs", MODE_PRIVATE)
+                                .edit()
+                                .putString("username", loggedInUsername)
+                                .apply();
+
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("token", response.body().getToken());
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "로그인 실패 (코드: " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Log.e("RetrofitError", "로그인 통신 실패: " + t.getMessage());
+                    Toast.makeText(LoginActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         // 회원가입 텍스트 클릭 시 처리
         registerText.setOnClickListener(v -> {
-            // 팝업창을 띄우기 위한 Dialog 생성
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.register);
             dialog.setCancelable(true);
-
-            // 다이얼로그 크기 설정 (옵션)
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            // 다이얼로그 보여주기
             dialog.show();
 
-            // 다이얼로그 내부에서 버튼 클릭 시 처리 (이 부분 DB와 연동)
-            Button registerButton = dialog.findViewById(R.id.register_btn); // register.xml에 있는 버튼 ID
+            // 회원가입 버튼 클릭
+            Button registerButton = dialog.findViewById(R.id.register_btn);
             registerButton.setOnClickListener(v1 -> {
-                Toast.makeText(this, "회원가입 처리", Toast.LENGTH_SHORT).show();
-                dialog.dismiss(); // 다이얼로그 닫기
+                EditText nameEditText = dialog.findViewById(R.id.label2);   // 이름
+                EditText idEditText = dialog.findViewById(R.id.label4);     // ID
+                EditText pwEditText = dialog.findViewById(R.id.label6);     // PW
+                EditText emailEditText = dialog.findViewById(R.id.label10); // 이메일
+
+                String username = idEditText.getText().toString();
+                String password = pwEditText.getText().toString();
+                String email = emailEditText.getText().toString();
+                String displayName = nameEditText.getText().toString();
+
+                RegisterRequest request = new RegisterRequest(username, password, email, displayName);
+
+                RetrofitClient.getApiService().registerUser(request).enqueue(new Callback<LoginResponse>() {
+                    @Override
+                    public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Toast.makeText(LoginActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "회원가입 실패 (코드: " + response.code() + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResponse> call, Throwable t) {
+                        Log.e("RetrofitError", "회원가입 통신 실패: " + t.getMessage());
+                        Toast.makeText(LoginActivity.this, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
-            //취소시 다이얼로그 닫기
+
+            // 취소 버튼 처리
             Button cancelButton = dialog.findViewById(R.id.cancel_btn);
-            cancelButton.setOnClickListener(v2 -> {
-                dialog.dismiss();
-            });
+            cancelButton.setOnClickListener(v2 -> dialog.dismiss());
         });
     }
 }
