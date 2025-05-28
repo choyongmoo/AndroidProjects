@@ -47,7 +47,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // 1) Places SDK 초기화
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyC4dSpoVXoZuTlB09fNZiMGdvy1XVFwQ4o", Locale.KOREA);
+            Places.initialize(getApplicationContext(), "키를 입력하세요", Locale.KOREA);
         }
         PlacesClient placesClient = Places.createClient(this);
 
