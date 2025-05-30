@@ -14,5 +14,7 @@ public record AppointmentResponse(
 
         String creatorId,
 
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        
+        Integer Penalty) {
 }

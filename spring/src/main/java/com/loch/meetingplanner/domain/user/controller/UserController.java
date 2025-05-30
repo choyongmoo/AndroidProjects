@@ -78,5 +78,4 @@ public class UserController {
         userService.updateUserLocation(username, request, currentUser.getUser());
         return ResponseEntity.ok().build();
     }
-    
 }
