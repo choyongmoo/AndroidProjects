@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.dto;
 
 public class LoginRequest {
     private String username;

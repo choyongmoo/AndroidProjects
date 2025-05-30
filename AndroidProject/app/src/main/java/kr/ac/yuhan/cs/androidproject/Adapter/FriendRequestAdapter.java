@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Adapter;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +17,11 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.ac.yuhan.cs.androidproject.ApiService;
+import kr.ac.yuhan.cs.androidproject.R;
+import kr.ac.yuhan.cs.androidproject.dto.FriendAcceptDto;
+import kr.ac.yuhan.cs.androidproject.dto.FriendRequestDto;
+import kr.ac.yuhan.cs.androidproject.dto.GetUserResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

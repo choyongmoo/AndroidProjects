@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +17,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.io.IOException;
 
+import kr.ac.yuhan.cs.androidproject.dto.FriendRequestDto;
+import kr.ac.yuhan.cs.androidproject.R;
+import kr.ac.yuhan.cs.androidproject.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

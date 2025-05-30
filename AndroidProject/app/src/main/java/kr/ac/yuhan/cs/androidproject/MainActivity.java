@@ -16,6 +16,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import kr.ac.yuhan.cs.androidproject.Fragment.AddFriendFragment;
+import kr.ac.yuhan.cs.androidproject.Fragment.FriendListFragment;
+import kr.ac.yuhan.cs.androidproject.Fragment.HomeFragment;
+import kr.ac.yuhan.cs.androidproject.Fragment.InfoFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;

@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.button.MaterialButton;
+
+import kr.ac.yuhan.cs.androidproject.R;
 
 public class HomeFragment extends Fragment {
 
@@ -26,20 +28,34 @@ public class HomeFragment extends Fragment {
         btnCreateMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // CreateMeetingFragment 인스턴스 생성
                 CreateMeetingFragment createMeetingFragment = new CreateMeetingFragment();
-
-                // FragmentTransaction 시작
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-
-                // 현재 프래그먼트를 CreateMeetingFragment로 교체
                 transaction.replace(R.id.fragment_container, createMeetingFragment);
-
-                // 뒤로가기 시 이전 프래그먼트로 돌아갈 수 있도록 백스택에 추가
                 transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
 
-                // 변경사항 커밋
+        MaterialButton btnGroupManage = rootView.findViewById(R.id.btnGroupManage);
+        btnGroupManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GroupFragment groupFragment = new GroupFragment();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, groupFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        MaterialButton btnMeetingList = rootView.findViewById(R.id.btnMeetingList);
+        btnMeetingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MeetingFragment meetingFragment = new MeetingFragment();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, meetingFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
@@ -47,6 +63,7 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
+    @Override
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {

@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import kr.ac.yuhan.cs.androidproject.R;
+import kr.ac.yuhan.cs.androidproject.RetrofitClient;
+import kr.ac.yuhan.cs.androidproject.dto.GetUserResponse;
+import kr.ac.yuhan.cs.androidproject.dto.UpdateUserRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,10 +36,9 @@ public class InfoFragment extends Fragment {
         Context context = getActivity();
         if (context == null) return;
 
+        // SharedPreferences에서 username과 token 가져오기
         String username = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
                 .getString("username", "");
-        String token = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-                .getString("token", "");
 
         TextView infoIdView = view.findViewById(R.id.infoIdView);
         EditText displayNameEdit = view.findViewById(R.id.infoEditDisplayName);
@@ -45,8 +48,8 @@ public class InfoFragment extends Fragment {
         Button modifyBtn = view.findViewById(R.id.register_btn);
         Button cancelBtn = view.findViewById(R.id.cancel_btn);
 
-        // 1. 서버에서 사용자 정보 가져오기
-        RetrofitClient.getApiService().getUserInfo("Bearer " + token, username)
+        // 1. 서버에서 사용자 정보 가져오기 (헤더 토큰은 RetrofitClient 내부에서 자동 처리)
+        RetrofitClient.getApiService().getUserInfo(username)
                 .enqueue(new Callback<GetUserResponse>() {
                     @Override
                     public void onResponse(Call<GetUserResponse> call, Response<GetUserResponse> response) {
@@ -71,7 +74,7 @@ public class InfoFragment extends Fragment {
                     }
                 });
 
-        // 수정하기 버
+        // 수정하기 버튼 클릭 리스너
         modifyBtn.setOnClickListener(v -> {
             String displayName = displayNameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
@@ -83,7 +86,7 @@ public class InfoFragment extends Fragment {
                     .setPositiveButton("네", (dialog, which) -> {
                         UpdateUserRequest request = new UpdateUserRequest(email, password, displayName, null);
 
-                        RetrofitClient.getApiService().updateUser("Bearer " + token, username, request)
+                        RetrofitClient.getApiService().updateUser(username, request)
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -120,7 +123,7 @@ public class InfoFragment extends Fragment {
                     .show();
         });
 
-        // 취소 버튼
+        // 취소 버튼 클릭 리스너
         cancelBtn.setOnClickListener(v -> {
             FragmentTransaction transaction = requireActivity()
                     .getSupportFragmentManager()

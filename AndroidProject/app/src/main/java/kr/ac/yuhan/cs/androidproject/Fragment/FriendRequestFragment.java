@@ -1,10 +1,11 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.List;
 
+import kr.ac.yuhan.cs.androidproject.Adapter.FriendRequestAdapter;
+import kr.ac.yuhan.cs.androidproject.dto.GetUserResponse;
+import kr.ac.yuhan.cs.androidproject.R;
+import kr.ac.yuhan.cs.androidproject.RetrofitClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +46,16 @@ public class FriendRequestFragment extends Fragment {
 
         adapter = new FriendRequestAdapter(RetrofitClient.getApiService());
         recyclerFriendRequest.setAdapter(adapter);
+
+        Button btnBack = view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            // 프래그먼트 교체
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new FriendListFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         loadFriendRequests();
 
@@ -71,6 +86,7 @@ public class FriendRequestFragment extends Fragment {
             }
         });
     }
+
 
     @Override
     public void onResume() {

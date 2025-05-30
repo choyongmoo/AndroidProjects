@@ -1,4 +1,4 @@
-package kr.ac.yuhan.cs.androidproject;
+package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.List;
 
+import kr.ac.yuhan.cs.androidproject.ApiService;
+import kr.ac.yuhan.cs.androidproject.Adapter.FriendAdapter;
+import kr.ac.yuhan.cs.androidproject.R;
+import kr.ac.yuhan.cs.androidproject.RetrofitClient;
+import kr.ac.yuhan.cs.androidproject.dto.GetUserResponse;
+import kr.ac.yuhan.cs.androidproject.dto.GroupSummary;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,10 +66,10 @@ public class FriendListFragment extends Fragment {
         });
 
         loadFriends(); // 친구 목록 불러오기 호출
+        loadGroups();  // 그룹 목록 불러오기 호출 추가
 
         return view;
     }
-
 
     private void loadFriends() {
         ApiService apiService = RetrofitClient.getApiService();
@@ -88,6 +94,25 @@ public class FriendListFragment extends Fragment {
             @Override
             public void onFailure(Call<List<GetUserResponse>> call, Throwable t) {
                 Toast.makeText(getContext(), "서버 연결 실패", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadGroups() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getGroups().enqueue(new Callback<List<GroupSummary>>() {
+            @Override
+            public void onResponse(Call<List<GroupSummary>> call, Response<List<GroupSummary>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    adapter.setGroups(response.body());
+                } else {
+                    Log.e("FriendListFragment", "그룹 목록 불러오기 실패: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GroupSummary>> call, Throwable t) {
+                Log.e("FriendListFragment", "그룹 목록 서버 연결 실패: " + t.getMessage());
             }
         });
     }

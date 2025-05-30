@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -5,13 +6,22 @@
     android:padding="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerFriendRequest"
+        android:id="@+id/recyclerGroupMembers"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:contentDescription="친구 요청 목록" />
+        android:contentDescription="그룹 멤버 목록" />
 
-    <!-- 하단 뒤로가기 버튼 -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMakeAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/round"
+        android:text="스케줄 생성"
+        android:layout_marginTop="8dp"/>
+
     <Button
         android:id="@+id/btnBack"
         android:layout_width="match_parent"
