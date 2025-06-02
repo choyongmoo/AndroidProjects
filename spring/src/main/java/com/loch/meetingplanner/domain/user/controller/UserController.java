@@ -69,7 +69,11 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+<<<<<<< HEAD
     @PostMapping("/{username}/location") //사용자 위치 정보 갱신
+=======
+    @PostMapping("/{username}/location")
+>>>>>>> fa47ea0963d6fe0e21f66d5f0bb0f4d604da197a
     public ResponseEntity<Void> updateUserLocation(
             @PathVariable String username,
             @RequestBody UpdateLocationRequest request,

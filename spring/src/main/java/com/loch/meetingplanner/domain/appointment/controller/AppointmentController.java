@@ -95,6 +95,7 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
+<<<<<<< HEAD
     //사용자 id로 약속 찾기
     @GetMapping("/me")
     public ResponseEntity<List<AppointmentResponse>> getMyAppointments(
@@ -103,4 +104,6 @@ public class AppointmentController {
         List<AppointmentResponse> appointments = appointmentService.getAppointmentsForUser(currentUser.getUser());
         return ResponseEntity.ok(appointments);
 }
+=======
+>>>>>>> fa47ea0963d6fe0e21f66d5f0bb0f4d604da197a
 }
