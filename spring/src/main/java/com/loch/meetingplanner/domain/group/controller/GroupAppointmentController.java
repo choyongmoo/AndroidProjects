@@ -15,11 +15,7 @@ public class GroupAppointmentController {
 
     private final AppointmentService appointmentService;
 
-<<<<<<< HEAD
     @GetMapping("/{groupId}/appointments") //특정 그룹에 포함된 약속 조회
-=======
-    @GetMapping("/{groupId}/appointments")
->>>>>>> fa47ea0963d6fe0e21f66d5f0bb0f4d604da197a
     public ResponseEntity<List<AppointmentResponse>> getAppointmentsByGroup(@PathVariable Long groupId) {
         List<AppointmentResponse> appointments = appointmentService.getAppointmentsByGroupId(groupId);
         return ResponseEntity.ok(appointments);
