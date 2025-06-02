@@ -4,12 +4,14 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
+import com.loch.meetingplanner.domain.auth.dto.NewPasswordRequest;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
 
 import jakarta.validation.Valid;
@@ -36,4 +38,10 @@ public class AuthController {
     LoginResponse response = authService.login(request);
     return ResponseEntity.ok(response);
   }
+
+  @PutMapping("/newpassword") // 비밀번호 변경 url /api/auth/newpassword
+    public ResponseEntity<Void> newPassword(@RequestBody NewPasswordRequest request) {
+        authService.newPassword(request);
+        return ResponseEntity.ok().build();
+    }
 }
