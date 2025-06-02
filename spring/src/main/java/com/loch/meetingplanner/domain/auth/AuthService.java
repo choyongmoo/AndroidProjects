@@ -11,7 +11,6 @@ import com.loch.meetingplanner.config.security.JwtTokenProvider;
 import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
-import com.loch.meetingplanner.domain.auth.dto.NewPasswordRequest;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
 import com.loch.meetingplanner.domain.user.model.User;
 import com.loch.meetingplanner.domain.user.repository.UserRepository;
@@ -74,15 +73,5 @@ public class AuthService {
         } catch (Exception e) {
             throw new RuntimeException("Login failed due to an internal error");
         }
-    }
-
-    @Transactional
-    public void newPassword(NewPasswordRequest request) {
-        User user = userRepository.findByUsername(request.username())
-                .filter(u -> u.getEmail().equals(request.email()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid username or email"));
-
-        user.setPasswordHash(passwordEncoder.encode(request.newPassword()));
-        userRepository.save(user);
     }
 }

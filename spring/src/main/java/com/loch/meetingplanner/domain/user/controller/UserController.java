@@ -50,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PutMapping("/{username}") //사용자 정보 수정(로그인 해야지 쓸 수 있음 한 마디로 jwt 인증된 사람만 정보수정이 가능하다!)
+    @PutMapping("/{username}") //사용자 정보 수정
     public ResponseEntity<Void> updateUser(
             @PathVariable String username,
             @Valid @RequestBody UpdateUserRequest request,

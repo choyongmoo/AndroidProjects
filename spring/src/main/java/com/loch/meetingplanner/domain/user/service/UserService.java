@@ -40,8 +40,8 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(user -> new GetUserResponse(
                         user.getUsername(),
-                        user.getDisplayName(),
                         user.getEmail(),
+                        user.getDisplayName(),
                         user.getProfileImageUrl(),
                         user.getCreatedAt(),
                         user.getUpdatedAt()))
@@ -61,8 +61,8 @@ public class UserService {
 
         return new GetUserResponse(
                 user.getUsername(),
-                user.getDisplayName(),
                 user.getEmail(),
+                user.getDisplayName(),
                 user.getProfileImageUrl(),
                 user.getCreatedAt(),
                 user.getUpdatedAt());

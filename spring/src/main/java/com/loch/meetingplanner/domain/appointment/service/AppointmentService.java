@@ -187,4 +187,11 @@ public class AppointmentService {
             .toList();
     }
 
+    //사용자 id로 약속 찾기
+    public List<AppointmentResponse> getAppointmentsForUser(User user) {
+    List<Appointment> appointments = appointmentRepository.findAppointmentsByUserId(user.getId());
+    return appointments.stream()
+            .map(AppointmentResponse::fromEntity)
+            .toList();
+    }
 }
