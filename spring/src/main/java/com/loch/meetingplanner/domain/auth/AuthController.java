@@ -24,14 +24,14 @@ public class AuthController {
     this.authService = authService;
   }
 
-  @PostMapping("/register")
+  @PostMapping("/register") //회원가입 url -> /api/auth/register
   public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterRequest request) {
     LoginResponse response = authService.register(request);
     URI location = URI.create("/api/users/" + response.username());
     return ResponseEntity.created(location).body(response);
   }
 
-  @PostMapping("/login")
+  @PostMapping("/login") //로그인 url -> /api/auth/login
   public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
     LoginResponse response = authService.login(request);
     return ResponseEntity.ok(response);

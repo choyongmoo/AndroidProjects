@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.GetUserResponse;
+import com.loch.meetingplanner.domain.user.dto.UpdateLocationRequest;
+import com.loch.meetingplanner.domain.user.model.LiveLocation;
 import com.loch.meetingplanner.domain.user.model.User;
+import com.loch.meetingplanner.domain.user.repository.LiveLocationRepository;
 import com.loch.meetingplanner.domain.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -19,13 +22,16 @@ import jakarta.transaction.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final LiveLocationRepository liveLocationRepository;
     private final PasswordEncoder passwordEncoder;
     private final FriendService friendService;
 
     public UserService(UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            FriendService friendService) {
+            FriendService friendService,
+            LiveLocationRepository liveLocationRepository) {
         this.userRepository = userRepository;
+        this.liveLocationRepository = liveLocationRepository;
         this.passwordEncoder = passwordEncoder;
         this.friendService = friendService;
     }
@@ -36,6 +42,7 @@ public class UserService {
                         user.getUsername(),
                         user.getEmail(),
                         user.getDisplayName(),
+                        user.getProfileImageUrl(),
                         user.getCreatedAt(),
                         user.getUpdatedAt()))
                 .collect(Collectors.toList());
@@ -56,6 +63,7 @@ public class UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getDisplayName(),
+                user.getProfileImageUrl(),
                 user.getCreatedAt(),
                 user.getUpdatedAt());
     }
@@ -87,6 +95,12 @@ public class UserService {
             user.setDisplayName(newDisplayName);
         }
 
+        //이거 추가해줬어~~
+        String newProfileImageUrl = request.profileImageUrl();
+        if (newProfileImageUrl != null && !newProfileImageUrl.isBlank()) {
+            user.setProfileImageUrl(newProfileImageUrl);
+        }
+
         userRepository.save(user);
     }
 
@@ -100,5 +114,22 @@ public class UserService {
         }
 
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public void updateUserLocation(String username, UpdateLocationRequest request, User currentUser) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        if (!user.getUsername().equals(currentUser.getUsername())) {
+            throw new AccessDeniedException("You are not allowed to modify this user's location");
+        }
+
+        LiveLocation newLocation = new LiveLocation();
+        newLocation.setUserId(user.getId());
+        newLocation.setLat(request.lat());
+        newLocation.setLng(request.lng());
+
+        liveLocationRepository.save(newLocation);
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/api/appointments") 
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
@@ -33,14 +33,14 @@ public class AppointmentController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") //전체 약속 조회
     public ResponseEntity<List<AppointmentResponse>> getAllAppointments(
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
         List<AppointmentResponse> responses = appointmentService.getAllAppointments();
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //특정 약속 조회
     public ResponseEntity<AppointmentResponse> getAppointment(
             @PathVariable Long id,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -49,7 +49,7 @@ public class AppointmentController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @PostMapping // /api/appointments 이거 쓰면 약속 생성됨 
     public ResponseEntity<AppointmentResponse> createAppointment(
             @RequestBody AppointmentRequest appointmentRequest,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -58,7 +58,7 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}") //약속 수정
     public ResponseEntity<Void> updateAppointment(
             @PathVariable Long id,
             @RequestBody AppointmentRequest appointmentRequest,
@@ -68,7 +68,7 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}") //약속 삭제
     public ResponseEntity<Void> deleteAppointment(
             @PathVariable Long id,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -77,7 +77,7 @@ public class AppointmentController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}/arrivals")
+    @GetMapping("/{id}/arrivals") //특정 약속의 도착 로그 조회
     public ResponseEntity<List<ArrivalLog>> getArrivalLogs(
             @PathVariable Long id,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -86,7 +86,7 @@ public class AppointmentController {
         return ResponseEntity.ok(arrivalLogs);
     }
 
-    @PostMapping("/{id}/arrive")
+    @PostMapping("/{id}/arrive") //해당 약속에 도착 표시
     public ResponseEntity<Void> arriveAtAppointment(
             @PathVariable Long id,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -95,10 +95,12 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
-    //그룹 약속 목록 조회
-    @GetMapping("/group/{groupId}")
-    public ResponseEntity<List<AppointmentResponse>> getAppointmentsByGroup(@PathVariable Long groupId) {
-        List<AppointmentResponse> appointments = appointmentService.getAppointmentsByGroupId(groupId);
+    //사용자 id로 약속 찾기
+    @GetMapping("/me")
+    public ResponseEntity<List<AppointmentResponse>> getMyAppointments(
+            @AuthenticationPrincipal SecurityUserDetails currentUser) {
+
+        List<AppointmentResponse> appointments = appointmentService.getAppointmentsForUser(currentUser.getUser());
         return ResponseEntity.ok(appointments);
-    }
+}
 }

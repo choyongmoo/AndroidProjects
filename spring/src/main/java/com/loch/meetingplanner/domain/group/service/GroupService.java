@@ -29,6 +29,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final GroupMemberRepository groupMemberRepository;
     private final UserRepository userRepository;
+    
 
     public GroupService(
         GroupRepository groupRepository,
@@ -50,7 +51,13 @@ public class GroupService {
         Group group = new Group();
         group.setGroupName(dto.groupname());
         group.setCreatedBy(user);
-        groupRepository.save(group);
+
+        Group savedGroup = groupRepository.save(group);
+
+        GroupMember groupMember = new GroupMember();
+        groupMember.setGroup(savedGroup);
+        groupMember.setUser(user);
+        groupMemberRepository.save(groupMember);
     }
 
     // 그룹 멤버 추가

@@ -27,7 +27,8 @@ CREATE TABLE users (
     display_name  CHARACTER VARYING(100) NOT NULL,
     role          CHARACTER VARYING(50)  NOT NULL,
     created_at    TIMESTAMP,
-    updated_at    TIMESTAMP
+    updated_at    TIMESTAMP,
+    profile_image_url  CHARACTER VARYING(500) --현성아 이거 추가했어 확인해줘 이거 프로필 이미지를 url로 저장해주는거야
 );
 
 -- TABLE: places
@@ -109,20 +110,9 @@ CREATE TABLE group_places (
 
 -- TABLE: live_locations
 CREATE TABLE live_locations (
-    id         BIGSERIAL        NOT NULL PRIMARY KEY,
-    user_id    BIGINT           NOT NULL UNIQUE,
+    user_id    BIGINT           NOT NULL PRIMARY KEY,
     lat        DOUBLE PRECISION NOT NULL,
     lng        DOUBLE PRECISION NOT NULL,
     update_at  TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_live_locations_users FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
--- TABLE: penalties
-CREATE TABLE penalties (
-    id             BIGSERIAL NOT NULL PRIMARY KEY,
-    appointment_id BIGINT    NOT NULL,
-    payer_id       BIGINT    NOT NULL,
-    amount         INTEGER   NOT NULL,
-    CONSTRAINT fk_penalties_appointments FOREIGN KEY (appointment_id) REFERENCES appointments (id),
-    CONSTRAINT fk_penalties_users        FOREIGN KEY (payer_id)       REFERENCES users (id)
 );

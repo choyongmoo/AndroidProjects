@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.GetUserResponse;
+import com.loch.meetingplanner.domain.user.dto.UpdateLocationRequest;
 import com.loch.meetingplanner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -31,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')") //모든 사용자 조회(관리자 전용)
     public ResponseEntity<List<GetUserResponse>> getAllUsers(
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
 
@@ -39,7 +41,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{username}")
+    @GetMapping("/{username}") //특정 사용자 조회
     public ResponseEntity<GetUserResponse> getUser(
             @PathVariable String username,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
@@ -48,7 +50,7 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PutMapping("/{username}")
+    @PutMapping("/{username}") //사용자 정보 수정
     public ResponseEntity<Void> updateUser(
             @PathVariable String username,
             @Valid @RequestBody UpdateUserRequest request,
@@ -58,12 +60,22 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/{username}") //사용자 삭제
     public ResponseEntity<Void> deleteUser(
             @PathVariable String username,
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
 
         userService.deleteUser(username, currentUser.getUser());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{username}/location") //사용자 위치 정보 갱신
+    public ResponseEntity<Void> updateUserLocation(
+            @PathVariable String username,
+            @RequestBody UpdateLocationRequest request,
+            @AuthenticationPrincipal SecurityUserDetails currentUser) {
+
+        userService.updateUserLocation(username, request, currentUser.getUser());
+        return ResponseEntity.ok().build();
     }
 }
