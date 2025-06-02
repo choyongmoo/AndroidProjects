@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.loch.meetingplanner.domain.auth.dto.FindIdRequest;
+import com.loch.meetingplanner.domain.auth.dto.FindIdResponse;
 import com.loch.meetingplanner.domain.auth.dto.LoginRequest;
 import com.loch.meetingplanner.domain.auth.dto.LoginResponse;
 import com.loch.meetingplanner.domain.auth.dto.NewPasswordRequest;
 import com.loch.meetingplanner.domain.auth.dto.RegisterRequest;
+import com.loch.meetingplanner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
 
@@ -21,9 +24,11 @@ import jakarta.validation.Valid;
 public class AuthController {
 
   private final AuthService authService;
+  private final UserService userService;
 
-  public AuthController(AuthService authService) {
+  public AuthController(AuthService authService, UserService userService) {
     this.authService = authService;
+    this.userService = userService;
   }
 
   @PostMapping("/register") //회원가입 url -> /api/auth/register
@@ -44,4 +49,10 @@ public class AuthController {
         authService.newPassword(request);
         return ResponseEntity.ok().build();
     }
+
+  @PostMapping("/findid") // 아이디 찾기 url /api/auth/findid
+  public ResponseEntity<FindIdResponse> findId(@RequestBody FindIdRequest request) {
+    String username = userService.findUsernameByEmail(request.email());
+    return ResponseEntity.ok(new FindIdResponse(request.email(), username));
+  }
 }
