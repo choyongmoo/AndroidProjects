@@ -1,0 +1,5 @@
+사용자 id로 그룹 검색 -> 완 
+/api/groups/{groupId} 사용
+
+사용자 id로 약속 검색  -> 완
+/api/appointments/me 사용

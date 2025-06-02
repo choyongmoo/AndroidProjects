@@ -57,7 +57,7 @@ public class FriendController {
         return ResponseEntity.ok(friends);
     }
 
-    @GetMapping("/requests")    //추가
+    @GetMapping("/requests")    //용무 추가
     public ResponseEntity<List<GetUserResponse>> getFriendRequests(
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
         List<GetUserResponse> requests = friendService.getPendingRequests(currentUser.getUser());

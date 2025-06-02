@@ -52,12 +52,6 @@ public class GroupService {
         group.setGroupName(dto.groupname());
         group.setCreatedBy(user);
         groupRepository.save(group);
-
-        //추가
-        GroupMember member = new GroupMember();
-        member.setGroup(group);
-        member.setUser(user);
-        groupMemberRepository.save(member);
     }
 
     // 그룹 멤버 추가

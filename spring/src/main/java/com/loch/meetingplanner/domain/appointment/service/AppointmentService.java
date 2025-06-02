@@ -72,21 +72,12 @@ public class AppointmentService {
             throw new AccessDeniedException("User is not a member of the group");
         }
 
-        Place place;
-        if(request.placeId() == null || request.placeId().equals("0")) {
-            // 기본 장소 아이디, 예를 들어 1L(임시코드 지도 기능 완성되면 밑에거 주석 풀고 이 설명과 밑에 주석 사이 코드 지우기기)
-            place = placeRepository.findById(1L)
-                    .orElseThrow(() -> new EntityNotFoundException("Default place not found"));
-        } else {
-            place = placeRepository.findById(Long.parseLong(request.placeId()))
-                    .orElseThrow(() -> new EntityNotFoundException("Place not found"));
-        }
-        // Place place = placeRepository.findById(Long.parseLong(request.placeId()))
-        //         .orElseThrow(() -> new EntityNotFoundException("Place not found"));
+        Place place = placeRepository.findById(Long.parseLong(request.placeId()))
+                .orElseThrow(() -> new EntityNotFoundException("Place not found"));
 
-        // if (!groupPlaceRepository.existsByGroupAndPlace(group, place)) {
-        //     throw new IllegalArgumentException("Place is not registered in the group");
-        // }
+        if (!groupPlaceRepository.existsByGroupAndPlace(group, place)) {
+            throw new IllegalArgumentException("Place is not registered in the group");
+        }
 
         Appointment appointment = new Appointment();
         appointment.setTitle(request.title());
@@ -179,8 +170,7 @@ public class AppointmentService {
                 appointment.getPlace().getId().toString(),
                 appointment.getTime(),
                 appointment.getCreatedBy().getId().toString(),
-                appointment.getCreatedAt(),
-                appointment.getPenalty());
+                appointment.getCreatedAt());
     }
 
     //그룹 약속 목록 조회
@@ -192,8 +182,7 @@ public class AppointmentService {
                 String.valueOf(appointment.getPlace().getId()),
                 appointment.getTime(),
                 String.valueOf(appointment.getCreatedBy().getId()),
-                appointment.getCreatedAt(),
-                appointment.getPenalty()
+                appointment.getCreatedAt()
             ))
             .toList();
     }
