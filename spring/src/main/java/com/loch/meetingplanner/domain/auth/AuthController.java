@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,9 +39,9 @@ public class AuthController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/newpassword") // 비밀번호 변경(로그인 x) url -> /api/auth/newpassword
-  public ResponseEntity<Void> newPassword(@RequestBody NewPasswordRequest request) {
-    authService.newPassword(request);
-    return ResponseEntity.ok().build();
-  }
+  @PutMapping("/newpassword") // 전체 URL은 /api/auth/newpassword -> post에서 put으로 바꿈
+    public ResponseEntity<Void> newPassword(@RequestBody NewPasswordRequest request) {
+        authService.newPassword(request);
+        return ResponseEntity.ok().build();
+    }
 }

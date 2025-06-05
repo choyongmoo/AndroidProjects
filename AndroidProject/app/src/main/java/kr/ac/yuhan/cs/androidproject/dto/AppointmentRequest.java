@@ -5,7 +5,7 @@ public class AppointmentRequest {
     private Integer penalty;
     private long groupId;
     private long placeId;
-    private String time;  // LocalDateTime → String 변경
+    private String time;
 
     public AppointmentRequest() {}
 

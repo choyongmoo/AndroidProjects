@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 상단 제목 -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:paddingBottom="8dp"/>
+
+    <!-- 구분선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 날짜/시간 -->
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="시간"
+        android:textSize="16sp"
+        android:textColor="#555555"
+        android:paddingBottom="4dp"/>
+
+    <!-- 벌금 -->
+    <TextView
+        android:id="@+id/tvPenalty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="벌금"
+        android:textSize="16sp"
+        android:textColor="#555555"
+        android:paddingBottom="4dp"/>
+
+    <!-- 그룹명 -->
+    <TextView
+        android:id="@+id/tvGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹"
+        android:textSize="16sp"
+        android:textColor="#555555"
+        android:paddingBottom="4dp"/>
+
+    <!-- 장소 -->
+    <TextView
+        android:id="@+id/tvPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="장소"
+        android:textSize="16sp"
+        android:textColor="#555555"
+        android:paddingBottom="8dp"/>
+
+    <!-- 참가자 제목 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="참여자"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp"/>
+
+    <!-- 참가자 목록 컨테이너 -->
+    <LinearLayout
+        android:id="@+id/participantContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:scrollbars="vertical"/>
+
+    <!-- 버튼 3개를 담는 하단 레이아웃 -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:weightSum="3"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/btnPlaceView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="장소보기"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnEditInviteDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="수정 / 초대 / 삭제"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="뒤로가기"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</LinearLayout>

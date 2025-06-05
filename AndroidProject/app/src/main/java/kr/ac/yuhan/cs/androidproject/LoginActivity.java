@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText upwEditText;
     private Button loginButton;
     private TextView registerText;
-    private TextView findUserText;  // 추가: 아이디/비밀번호 찾기 텍스트
+    private TextView findUserText;
 
     private TokenManager tokenManager;
 
@@ -62,13 +62,10 @@ public class LoginActivity extends AppCompatActivity {
                         String token = response.body().getToken();
                         String loggedInUsername = response.body().getUsername();
 
-                        // 토큰 저장
                         tokenManager.saveToken(token);
 
-                        // Retrofit 재설정 (토큰 반영 위해)
                         RetrofitClient.initTokenManager(LoginActivity.this);
 
-                        // 사용자 정보 요청
                         RetrofitClient.getApiService().getUserInfo(loggedInUsername)
                                 .enqueue(new Callback<GetUserResponse>() {
                                     @Override
@@ -176,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, FindUsernameActivity.class);
                             startActivity(intent);
                         } else if (which == 1) { // 비밀번호 찾기 선택
-                            Intent intent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, NewPasswordActivity.class);
                             startActivity(intent);
                         }
                     }

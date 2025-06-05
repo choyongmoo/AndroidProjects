@@ -40,8 +40,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         GroupSummary group = groupList.get(position);
         holder.tvGroupName.setText(group.getGroupName());
 
-        holder.tvMemberCount.setText("");
-
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onGroupClick(group);
         });
@@ -54,12 +52,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     static class GroupViewHolder extends RecyclerView.ViewHolder {
         TextView tvGroupName;
-        TextView tvMemberCount;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             tvGroupName = itemView.findViewById(R.id.tvGroupName);
-            tvMemberCount = itemView.findViewById(R.id.tvMemberCount);
         }
     }
 

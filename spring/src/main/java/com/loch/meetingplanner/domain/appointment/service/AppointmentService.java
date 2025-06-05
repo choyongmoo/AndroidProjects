@@ -112,8 +112,11 @@ public class AppointmentService {
         Place place = placeRepository.findById(Long.parseLong(request.placeId()))
                 .orElseThrow(() -> new EntityNotFoundException("Place not found"));
 
-        if (!groupPlaceRepository.existsByGroupAndPlace(appointment.getGroup(), place)) {
-            throw new IllegalArgumentException("Place is not registered in the group");
+         // 임시 장소 ID일 경우 검사 생략 (예: placeId == "1")
+        if (!"1".equals(request.placeId())) {
+            if (!groupPlaceRepository.existsByGroupAndPlace(appointment.getGroup(), place)) {
+                throw new IllegalArgumentException("Place is not registered in the group");
+            }
         }
 
         appointment.setTitle(request.title());
@@ -180,7 +183,8 @@ public class AppointmentService {
                 appointment.getTime(),
                 appointment.getCreatedBy().getId().toString(),
                 appointment.getCreatedAt(),
-                appointment.getPenalty());
+                appointment.getPenalty(),
+                appointment.getTitle());
     }
 
     //그룹 약속 목록 조회
@@ -193,9 +197,16 @@ public class AppointmentService {
                 appointment.getTime(),
                 String.valueOf(appointment.getCreatedBy().getId()),
                 appointment.getCreatedAt(),
-                appointment.getPenalty()
+                appointment.getPenalty(),
+                appointment.getTitle()
             ))
             .toList();
     }
-
+        //사용자 id로 약속 찾기
+    public List<AppointmentResponse> getAppointmentsForUser(User user) {
+    List<Appointment> appointments = appointmentRepository.findAppointmentsByUserId(user.getId());
+    return appointments.stream()
+            .map(AppointmentResponse::fromEntity)
+            .toList();
+    }
 }

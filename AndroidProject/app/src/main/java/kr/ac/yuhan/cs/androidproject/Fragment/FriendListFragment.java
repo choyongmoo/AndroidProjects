@@ -65,8 +65,8 @@ public class FriendListFragment extends Fragment {
             transaction.commit();
         });
 
-        loadFriends(); // 친구 목록 불러오기 호출
-        loadGroups();  // 그룹 목록 불러오기 호출 추가
+        loadFriends(); // 친구 목록 불러오기
+        loadGroups();  // 그룹 목록 불러오기
 
         return view;
     }

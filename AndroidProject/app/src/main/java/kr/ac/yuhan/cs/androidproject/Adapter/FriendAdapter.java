@@ -139,7 +139,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
                 return group.getId();
             }
         }
-        return -1;  // 못 찾으면 -1 반환
+        return -1;
     }
 
     @Override

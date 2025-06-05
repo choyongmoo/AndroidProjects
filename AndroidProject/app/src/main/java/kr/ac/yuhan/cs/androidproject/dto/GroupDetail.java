@@ -7,7 +7,7 @@ public class GroupDetail {
     private String groupName;
     private List<GroupMember> members;
 
-    public GroupDetail() {}  // 기본 생성자 추가
+    public GroupDetail() {}
 
     public GroupDetail(String groupName, List<GroupMember> members) {
         this.groupName = groupName;

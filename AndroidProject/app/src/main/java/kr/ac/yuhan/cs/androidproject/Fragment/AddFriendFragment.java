@@ -62,7 +62,6 @@ public class AddFriendFragment extends Fragment {
                 return;
             }
 
-            // DTO 생성 (이름은 상황에 맞게 변경 가능)
             FriendRequestDto request = new FriendRequestDto(friendUsername);
 
             RetrofitClient.getApiService().sendFriendRequest(request).enqueue(new Callback<Void>() {
@@ -98,7 +97,6 @@ public class AddFriendFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (getActivity() != null) {
-            // 상단 타이틀 바 등 UI 갱신용
             TextView homeTitle = getActivity().findViewById(R.id.homeTitle);
             if (homeTitle != null) {
                 homeTitle.setText("친구 추가");

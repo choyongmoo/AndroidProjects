@@ -1,11 +1,15 @@
 package kr.ac.yuhan.cs.androidproject.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
 
 import kr.ac.yuhan.cs.androidproject.R;
 import kr.ac.yuhan.cs.androidproject.RetrofitClient;
@@ -24,6 +30,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class InfoFragment extends Fragment {
+
+    private static final int PICK_IMAGE_REQUEST = 1001;
+    private Uri selectedImageUri = null;
+    private ImageView profileImageView;
 
     public InfoFragment() {
         super(R.layout.info);
@@ -36,19 +46,23 @@ public class InfoFragment extends Fragment {
         Context context = getActivity();
         if (context == null) return;
 
-        // SharedPreferences에서 username과 token 가져오기
-        String username = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
-                .getString("username", "");
-
+        profileImageView = view.findViewById(R.id.userProfileImage1);
         TextView infoIdView = view.findViewById(R.id.infoIdView);
         EditText displayNameEdit = view.findViewById(R.id.infoEditDisplayName);
         EditText passwordEdit = view.findViewById(R.id.infoEditPwd);
         EditText emailEdit = view.findViewById(R.id.infoEditEmail);
-
         Button modifyBtn = view.findViewById(R.id.register_btn);
         Button cancelBtn = view.findViewById(R.id.cancel_btn);
 
-        // 1. 서버에서 사용자 정보 가져오기 (헤더 토큰은 RetrofitClient 내부에서 자동 처리)
+        String username = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+                .getString("username", "");
+
+        profileImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
+
         RetrofitClient.getApiService().getUserInfo(username)
                 .enqueue(new Callback<GetUserResponse>() {
                     @Override
@@ -58,35 +72,43 @@ public class InfoFragment extends Fragment {
                             infoIdView.setText(user.getUsername());
                             displayNameEdit.setText(user.getDisplayName());
                             emailEdit.setText(user.getEmail());
-
-                            // 비밀번호는 서버에서 보내지 않으므로 빈칸 유지
                             passwordEdit.setText("");
+
+                            String profileImageUrl = user.getProfileImageUrl();
+                            if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                                Glide.with(requireContext())
+                                        .load(profileImageUrl)
+                                        .placeholder(R.drawable.default_profile)
+                                        .into(profileImageView);
+                            }
                         } else {
                             Toast.makeText(context, "사용자 정보 불러오기 실패: " + response.code(), Toast.LENGTH_SHORT).show();
-                            infoIdView.setText(username);  // 최소한 아이디는 보여줌
+                            infoIdView.setText(username);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GetUserResponse> call, Throwable t) {
                         Toast.makeText(context, "서버 연결 실패: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                        infoIdView.setText(username);  // 최소한 아이디는 보여줌
+                        infoIdView.setText(username);
                     }
                 });
 
-        // 수정하기 버튼 클릭 리스너
         modifyBtn.setOnClickListener(v -> {
             String displayName = displayNameEdit.getText().toString();
             String password = passwordEdit.getText().toString();
             String email = emailEdit.getText().toString();
 
+            final String profileImageUrl = (selectedImageUri != null) ? selectedImageUri.toString() : null;
+
             new AlertDialog.Builder(requireContext())
                     .setTitle("프로필 수정")
                     .setMessage("정말로 수정하시겠습니까?")
                     .setPositiveButton("네", (dialog, which) -> {
-                        UpdateUserRequest request = new UpdateUserRequest(email, password, displayName, null);
+                        UpdateUserRequest updateUserRequest = new UpdateUserRequest(email, password, displayName, profileImageUrl);
 
-                        RetrofitClient.getApiService().updateUser(username, request)
+                        RetrofitClient.getApiService()
+                                .updateUser(username, updateUserRequest)
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -109,12 +131,14 @@ public class InfoFragment extends Fragment {
                                             transaction.replace(R.id.fragment_container, new HomeFragment());
                                             transaction.commit();
                                         } else {
+                                            Log.e("InfoFragment", "Update failed: " + response.code() + " - " + response.message());
                                             Toast.makeText(getContext(), "수정 실패: " + response.code(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<Void> call, Throwable t) {
+                                        Log.e("InfoFragment", "Update error", t);
                                         Toast.makeText(getContext(), "서버 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -123,7 +147,6 @@ public class InfoFragment extends Fragment {
                     .show();
         });
 
-        // 취소 버튼 클릭 리스너
         cancelBtn.setOnClickListener(v -> {
             FragmentTransaction transaction = requireActivity()
                     .getSupportFragmentManager()
@@ -131,6 +154,15 @@ public class InfoFragment extends Fragment {
             transaction.replace(R.id.fragment_container, new HomeFragment());
             transaction.commit();
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            profileImageView.setImageURI(selectedImageUri);
+        }
     }
 
     @Override

@@ -50,7 +50,6 @@ public class GroupFragment extends Fragment {
         adapter = new GroupAdapter(groups, groupSummary -> {
             long groupId = groupSummary.getId();
 
-            // 수정: GroupMembersFragment에 groupId 하나만 넘김
             GroupMembersFragment fragment = GroupMembersFragment.newInstance(groupId);
 
             getParentFragmentManager().beginTransaction()
@@ -132,6 +131,13 @@ public class GroupFragment extends Fragment {
             @Override
             public void onResponse(Call<List<GroupSummary>> call, Response<List<GroupSummary>> response) {
                 if(response.isSuccessful() && response.body() != null){
+                    List<GroupSummary> groupList = response.body();
+                    StringBuilder sb = new StringBuilder();
+                    for(GroupSummary g : groupList){
+                        sb.append(g.getGroupName()).append(", ");
+                    }
+                    Log.d("GroupFragment", "Groups from server: " + sb.toString());
+
                     groups.clear();
                     groups.addAll(response.body());
                     adapter.notifyDataSetChanged();

@@ -189,20 +189,18 @@ public class CreateMeetingFragment extends Fragment {
 
         int selectedRewardId = rgRewardType.getCheckedRadioButtonId();
         if (selectedRewardId == R.id.rbNone) {
-            penalty = 0; // 무보상일 경우 패널티 0
+            penalty = 0;
         }
 
         String dateTimeStr = date + "T" + time + ":00";
 
         try {
-            // 날짜+시간 형식 체크 (ISO_LOCAL_DATE_TIME 형식)
             org.threeten.bp.LocalDateTime.parse(dateTimeStr, org.threeten.bp.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         } catch (Exception e) {
             Toast.makeText(getContext(), "날짜 또는 시간 형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 서버 요청용 DTO 생성
         AppointmentRequest request = new AppointmentRequest();
         request.setTitle(title);
         request.setPenalty(penalty);

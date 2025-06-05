@@ -51,13 +51,13 @@ public class GroupService {
         Group group = new Group();
         group.setGroupName(dto.groupname());
         group.setCreatedBy(user);
-        groupRepository.save(group);
 
-        //추가
-        GroupMember member = new GroupMember();
-        member.setGroup(group);
-        member.setUser(user);
-        groupMemberRepository.save(member);
+        Group savedGroup = groupRepository.save(group);
+
+        GroupMember groupMember = new GroupMember();
+        groupMember.setGroup(savedGroup);
+        groupMember.setUser(user);
+        groupMemberRepository.save(groupMember);
     }
 
     // 그룹 멤버 추가
@@ -77,7 +77,7 @@ public class GroupService {
 
     // 그룹 목록 보기
     public List<GroupResponse> getGroupsForUser(User user) {
-        List<Group> groups = groupRepository.findByCreatedBy(user);
+        List<Group> groups = groupMemberRepository.findGroupsByUser(user);
 
         return groups.stream()
                 .map(g -> new GroupResponse(g.getId(), g.getGroupName()))

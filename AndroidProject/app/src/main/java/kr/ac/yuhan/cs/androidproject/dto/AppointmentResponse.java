@@ -7,8 +7,21 @@ public class AppointmentResponse {
     private String time;
     private String creatorId;
     private String createdAt;
+    private Integer penalty;
+    private String title;
 
     public AppointmentResponse() {}
+
+    public AppointmentResponse(Long id, String groupId, String placeId, String time, String creatorId, String createdAt, Integer penalty, String title) {
+        this.id = id;
+        this.groupId = groupId;
+        this.placeId = placeId;
+        this.time = time;
+        this.creatorId = creatorId;
+        this.createdAt = createdAt;
+        this.penalty = penalty;
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -56,5 +69,21 @@ public class AppointmentResponse {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Integer getPenalty() {
+        return penalty;
+    }
+
+    public void setPenalty(Integer penalty) {
+        this.penalty = penalty;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

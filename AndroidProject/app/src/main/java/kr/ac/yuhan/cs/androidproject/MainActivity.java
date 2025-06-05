@@ -98,9 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navLogout.setOnClickListener(v -> {
-            // SharedPreferences 초기화
             SharedPreferences.Editor editor = prefs.edit();
-            editor.clear(); // 또는 editor.remove("displayName"); 등 필요한 키만 삭제 가능
+            editor.clear();
             editor.apply();
 
             // 로그인 화면으로 이동

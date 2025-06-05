@@ -49,7 +49,6 @@ public class FriendRequestFragment extends Fragment {
 
         Button btnBack = view.findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> {
-            // 프래그먼트 교체
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new FriendListFragment())

@@ -35,8 +35,8 @@ public interface ApiService {
     @GET("users/{username}")
     Call<GetUserResponse> getUserInfo(@Path("username") String username);
 
-    @POST("auth/newpassword")
-    Call<Void> changePassword(@Body NewPasswordRequest request);
+    @PUT("/api/auth/newpassword")
+    Call<Void> resetPassword(@Body NewPasswordRequest request);
 
     @PUT("users/{username}")
     Call<Void> updateUser(@Path("username") String username, @Body UpdateUserRequest request );
@@ -99,4 +99,8 @@ public interface ApiService {
     // 특정 약속에 도착 표시 (체크인)
     @POST("appointments/{id}/arrive")
     Call<Void> arriveAtAppointment(@Path("id") Long id);
+
+    // 로그인된 사용자의 약속 목록 조회
+    @GET("appointments/me")
+    Call<List<AppointmentResponse>> getMyAppointments();
 }
