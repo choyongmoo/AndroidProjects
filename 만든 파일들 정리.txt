@@ -1,0 +1,86 @@
+1.AndroidManifest.xml ( 수정)
+2. gradle scripts(코드 추가)
+3.fragment_select_location.xml(추가)
+4.map_view_ui.xml(추가)
+5.home.xml(수정)
+6.fragment_place_view.xml(생성)
+
+------java
+
+PlaceSelectionActivity(추가)
+MapActivity(추가)
+ApiService(코드 추가)
+CreateMeetingFragment(코드 추가 및 수정)
+HomeFragment(코드 추가 및 수정)
+PlaceResponse(추가)
+PlaceRequest(추가)
+AppointmentRequest(수정)
+AppointmentResponse(수정)
+MeetingFregment(수정)
+DetailMeetingFragment(수정)
+MeetingFragment(수정)
+Meeting(수정)
+EditAppointmentFragment(수정)
+
+PlaceViewFragment(생성)
+
+
+---------spring
+
+appointment ->AppointmentRequest.java(생성)
+       AppointmentResponse.java(생성)
+
+	AppointmentService.java(수정) -> 경고성 메시지 뜨는데 실행에는 문제없음
+
+group -> PlaceController.java(수정)
+
+	place.java(생성)
+	PlaceRequest.java(생성)
+	PlaceResponse.java(생성)
+
+
+------------------------------------------
+
+1.에뮬설정에서 유한대학교 수동 설정해주기 위치
+
+
+2.지도보기 눌렀을때 꺼지는 오류 있을수 있음(다시 시작해야함)
+-> 로그를 보면 앱이 ANR (Application Not Responding) 오류로 강제 종료되고 있어요. 이건 단순한 코드 버그라기보다는, 다음과 같은 앱이 메인 스레드에서 오래 멈춰 있는 구조적 문제 때문입니다.
+
+3. api키는 내 api키 코드 그냥 놨둠(보안 위험있지만 프로젝트 발표끝나면 api키 삭제할 예정)
+
+
+
+
+
+------------------------------------------- 공유 기능(여기 추가함)
+
+--------------- spring
+
+1. location 생성(폴더 4개-파일4개)
+
+2.auth-> authService.java(수정)
+	 authController.java(수정)
+
+
+3. com.loch.meetingplanner.config.security -> JwtTokenProvider.java(수정)
+
+4. schema.sql 테이블 추가 (shared_location) -> 중요***************************************************
+
+---------- android
+
+SharedLocation.java(생성)
+SharedLocationApi.java(생성)
+PlaceViewFragment.java(수정)
+ApiService(수정)
+DetailMeetingFragment.java(수정)
+TokenManiger.java(수정)
+
+--------------------------------------------------
+
+
+
+
+
+
+

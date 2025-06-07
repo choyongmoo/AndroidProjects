@@ -1,0 +1,62 @@
+✅ 1. 공유 기능 요약 설명 (전체 흐름)
+📱 Android (클라이언트)
+공유 버튼을 누르면:
+- 약속 장소를 기준으로 내 위치가 살짝 랜덤하게 생성되어 서버로 전송됨 (에뮬이라 실제 GPS 사용 못함 → 더미값 사용)
+- 1분마다 자동으로 갱신
+- 마커는 내가 공유 중이면 녹색, 다른 사람은 파랑, 주황, 보라 등으로 표시됨
+
+공유 버튼을 다시 누르면:
+- 공유 종료됨 → 서버에 isSharing = false 전송 → 내 마커는 지도에서 사라짐
+
+지도 화면에서 마커 표시:
+- 서버에 저장된 유저별 위치 목록을 불러와서 마커로 표시
+- 내 위치는 중심 확대, 다른 유저 위치도 지도에서 볼 수 있게 주변에 표시
+
+💾 Spring Boot (서버)
+- 유저가 공유한 위치를 shared_location 테이블에 저장
+- appointmentId로 묶어서 특정 약속에 참여한 사람들의 위치만 불러옴
+- isSharing 값에 따라 공유 중인 사람만 지도에 표시
+
+✅ 2. 실제 공유 기능 구성 파일 정리
+
+📂 Android
+파일명			역할
+SharedLocation.java		서버와 주고받는 위치 데이터 DTO
+SharedLocationApi.java		위치 전송/조회용 API 인터페이스
+ApiService.java		SharedLocationApi 포함되도록 수정
+TokenManager.java		JWT 토큰에서 userId 추출 추가
+PlaceViewFragment.java		핵심 위치 공유 기능 구현 (버튼 클릭 → 위치 전송 → 지도에 마커 표시, 1분마다 더미 위치 생성해서 업데이트)
+DetailMeetingFragment.java	'장소 보기' 버튼 누르면 PlaceViewFragment로 이동하게 설정
+
+📂 Spring Boot (백엔드)
+경로/파일명		역할
+/location/SharedLocation.java		DB와 매핑되는 JPA 엔티티
+/location/SharedLocationRepository.java		DB 접근 레포지토리
+/location/SharedLocationService.java		위치 저장/조회 로직
+/location/SharedLocationController.java		API 라우터: /api/shared-location 엔드포인트 담당
+/auth/AuthService.java		userId 추출 로직에 공유 기능 관련 로직 보완
+/auth/AuthController.java		토큰 인증 후 사용자 정보 응답 가능하게 변경
+/config/security/JwtTokenProvider.java		JWT에서 userId 꺼내도록 추가
+schema.sql				shared_location 테이블 추가: 위치 공유 핵심 테이블 (userId, appointmentId, lat, lng, isSharing)
+
+✅ 현재 공유 기능 상세 정리
+항목		설명
+공유 버튼 누르면	약속 장소 기준으로 랜덤 오프셋 위치 생성해 서버에 전송, 1분마다 갱신
+마커 색상		본인은 초록, 나머지는 색 랜덤 배정 (최대 5명까지 구분)
+지도 보기(에뮬)	현재 위치는 GPS 미사용 → 유한대 고정 좌표 사용
+장소보기 화면		실시간 위치 전송 코드 존재하지만 실제 GPS 위치는 못 씀 (더미 위치 활용)
+공유 종료		isSharing = false로 전송되면 마커 사라짐
+공유 중간에 장소 변경	장소 변경 시 기준 좌표가 달라져 새로운 주변 위치가 공유됨
+
+🔥 보완이 필요한 점 (실제 구현 vs 기대 기능)
+항목		설명
+실제 GPS 사용 안 됨	에뮬레이터라 getLastLocation() 작동안함. 더미값 사용 중
+위치 고정 안 됨		공유 누를 때마다 위치 재생성됨 (이건 의도된 기능으로 유지 중)
+5명 이상일 경우 색상 중복 가능성 있음	최대 5가지 색만 구현했기 때문
+위치 공유 종료 후 지도 갱신 약간 지연	서버 응답과 마커 제거 로직에 1~2초 지연 가능성 있음
+
+✅ 결론
+- 위치 공유 기능은 완성 상태
+- 실시간 위치 구현은 더미로 대체했음
+- 팀원 입장에서 보면 마커 잘 뜨고, 공유 누르면 잘 꺼지고, 위치도 매끄럽게 보임
+- 코드는 깔끔하게 모듈화돼있고 유지보수도 쉬움
