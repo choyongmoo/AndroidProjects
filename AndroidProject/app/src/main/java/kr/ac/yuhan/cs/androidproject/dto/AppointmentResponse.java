@@ -4,6 +4,7 @@ public class AppointmentResponse {
     private Long id;
     private String groupId;
     private String placeId;
+    private String placeName; // ✅ 추가!
     private String time;
     private String creatorId;
     private String createdAt;
@@ -12,10 +13,12 @@ public class AppointmentResponse {
 
     public AppointmentResponse() {}
 
-    public AppointmentResponse(Long id, String groupId, String placeId, String time, String creatorId, String createdAt, Integer penalty, String title) {
+    public AppointmentResponse(Long id, String groupId, String placeId, String placeName, String time,
+                               String creatorId, String createdAt, Integer penalty, String title) {
         this.id = id;
         this.groupId = groupId;
         this.placeId = placeId;
+        this.placeName = placeName; // ✅ 추가!
         this.time = time;
         this.creatorId = creatorId;
         this.createdAt = createdAt;
@@ -23,6 +26,16 @@ public class AppointmentResponse {
         this.title = title;
     }
 
+    // --- getter/setter 포함해서 아래 추가 ---
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
+    // 기존 getter/setter는 그대로 둡니다.
     public Long getId() {
         return id;
     }

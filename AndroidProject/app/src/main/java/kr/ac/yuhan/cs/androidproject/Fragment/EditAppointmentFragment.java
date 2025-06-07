@@ -1,7 +1,9 @@
 package kr.ac.yuhan.cs.androidproject.Fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +30,14 @@ import java.util.List;
 import java.util.Locale;
 
 import kr.ac.yuhan.cs.androidproject.ApiService;
+import kr.ac.yuhan.cs.androidproject.PlaceSelectionActivity;
 import kr.ac.yuhan.cs.androidproject.R;
 import kr.ac.yuhan.cs.androidproject.RetrofitClient;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentRequest;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentResponse;
 import kr.ac.yuhan.cs.androidproject.dto.GroupSummary;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceRequest;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,6 +55,7 @@ public class EditAppointmentFragment extends Fragment {
     private AppointmentResponse currentAppointment;
 
     private long initialGroupId = -1L;
+    private long selectedPlaceId = -1L;
     private List<GroupSummary> groupList = new ArrayList<>();
 
     @Nullable
@@ -70,6 +76,9 @@ public class EditAppointmentFragment extends Fragment {
             }
             if (getArguments().containsKey("groupId")) {
                 initialGroupId = getArguments().getLong("groupId", -1L);
+            }
+            if (getArguments().containsKey("placeId")) {
+                selectedPlaceId = getArguments().getLong("placeId", -1L);
             }
         }
 
@@ -95,6 +104,11 @@ public class EditAppointmentFragment extends Fragment {
     private void setupListeners() {
         btnDate.setOnClickListener(v -> showDatePicker());
         btnTime.setOnClickListener(v -> showTimePicker());
+
+        btnSelectPlace.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), PlaceSelectionActivity.class);
+            startActivityForResult(intent, 1001);
+        });
 
         confirmBtn.setOnClickListener(v -> {
             if (currentAppointment != null) {
@@ -146,6 +160,9 @@ public class EditAppointmentFragment extends Fragment {
                 btnTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(date));
             }
         } catch (ParseException ignored) {}
+
+        btnSelectPlace.setText(appointment.getPlaceName());
+        selectedPlaceId = Long.parseLong(appointment.getPlaceId());
         rbNone.setChecked(true);
     }
 
@@ -206,14 +223,13 @@ public class EditAppointmentFragment extends Fragment {
         String formattedTime = format.format(selectedDateTime.getTime());
 
         long selectedGroupId = groupList.isEmpty() ? -1L : groupList.get(spinnerGroup.getSelectedItemPosition()).getId();
-        long placeId = 1L;
 
         if (selectedGroupId == -1L) {
             Toast.makeText(requireContext(), "그룹을 선택해주세요", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        AppointmentRequest request = new AppointmentRequest(title, penalty, selectedGroupId, placeId, formattedTime);
+        AppointmentRequest request = new AppointmentRequest(title, penalty, selectedGroupId, selectedPlaceId, formattedTime);
 
         ApiService apiService = RetrofitClient.getApiService();
         apiService.updateAppointment(appointmentId, request).enqueue(new Callback<Void>() {
@@ -262,4 +278,39 @@ public class EditAppointmentFragment extends Fragment {
                 }, hour, minute, true);
         timePickerDialog.show();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1001 && resultCode == Activity.RESULT_OK && data != null) {
+            String address = data.getStringExtra("address");
+            String name = data.getStringExtra("name");
+            double lat = data.getDoubleExtra("latitude", 0.0);
+            double lng = data.getDoubleExtra("longitude", 0.0);
+
+            btnSelectPlace.setText(address);
+
+            // 🌟 서버에 장소 등록 요청
+            ApiService apiService = RetrofitClient.getApiService();
+            PlaceRequest placeRequest = new PlaceRequest(name, lat, lng, address);
+            apiService.createOrGetPlace(placeRequest).enqueue(new Callback<PlaceResponse>() {
+                @Override
+                public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        selectedPlaceId = response.body().getId(); // ✅ DB placeId 저장
+                    } else {
+                        Toast.makeText(getContext(), "장소 ID 등록 실패", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PlaceResponse> call, Throwable t) {
+                    Toast.makeText(getContext(), "서버 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
 }
+

@@ -132,4 +132,10 @@ public class UserService {
 
         liveLocationRepository.save(newLocation);
     }
+     // 이메일로 username 조회
+    public String findUsernameByEmail(String email) {
+        return userRepository.findByEmail(email)
+            .map(User::getUsername)
+            .orElseThrow(() -> new IllegalArgumentException("해당 이메일로 등록된 사용자가 없습니다."));
+    }
 }

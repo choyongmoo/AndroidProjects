@@ -7,6 +7,7 @@ public class AppointmentRequest {
     private long placeId;
     private String time;
 
+
     public AppointmentRequest() {}
 
     public AppointmentRequest(String title, Integer penalty, long groupId, long placeId, String time) {

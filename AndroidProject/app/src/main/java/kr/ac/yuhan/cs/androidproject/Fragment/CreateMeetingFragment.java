@@ -1,7 +1,9 @@
 package kr.ac.yuhan.cs.androidproject.Fragment;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,11 +29,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import kr.ac.yuhan.cs.androidproject.ApiService;
+import kr.ac.yuhan.cs.androidproject.PlaceSelectionActivity;
 import kr.ac.yuhan.cs.androidproject.R;
 import kr.ac.yuhan.cs.androidproject.RetrofitClient;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentRequest;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentResponse;
 import kr.ac.yuhan.cs.androidproject.dto.GroupSummary;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceRequest;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,9 +50,40 @@ public class CreateMeetingFragment extends Fragment {
     private Spinner spinnerGroup;
 
     private long selectedGroupId = 0;
-    private long selectedPlaceId = 1L; // TODO 자준아 지도 기능 합쳐
+    private long selectedPlaceId = 1L;
 
     private List<GroupSummary> groupList = new ArrayList<>();
+
+    private final ActivityResultLauncher<Intent> placeResultLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    double lat = data.getDoubleExtra("latitude", 0.0);
+                    double lng = data.getDoubleExtra("longitude", 0.0);
+                    String address = data.getStringExtra("address");
+                    String name = data.getStringExtra("name");
+
+                    btnSelectPlace.setText(address != null ? address : lat + ", " + lng);
+
+                    ApiService apiService = RetrofitClient.getApiService();
+                    PlaceRequest placeRequest = new PlaceRequest(name, lat, lng, address);
+                    apiService.createOrGetPlace(placeRequest).enqueue(new Callback<PlaceResponse>() {
+                        @Override
+                        public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                selectedPlaceId = response.body().getId();
+                            } else {
+                                Toast.makeText(getContext(), "장소 저장 실패", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PlaceResponse> call, Throwable t) {
+                            Toast.makeText(getContext(), "장소 저장 오류: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
 
     @Nullable
     @Override
@@ -59,7 +97,6 @@ public class CreateMeetingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 뷰 초기화
         etTitle = view.findViewById(R.id.etTitle);
         btnDate = view.findViewById(R.id.btnDate);
         btnTime = view.findViewById(R.id.btnTime);
@@ -70,11 +107,14 @@ public class CreateMeetingFragment extends Fragment {
         cancelBtn = view.findViewById(R.id.cancelBtn);
         spinnerGroup = view.findViewById(R.id.spinnerGroup);
 
-        // 날짜, 시간 버튼 클릭 이벤트
         btnDate.setOnClickListener(v -> showDatePicker());
         btnTime.setOnClickListener(v -> showTimePicker());
 
-        // 확인 버튼 클릭 이벤트
+        btnSelectPlace.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), PlaceSelectionActivity.class);
+            placeResultLauncher.launch(intent);
+        });
+
         confirmBtn.setOnClickListener(v -> createAppointment());
 
         cancelBtn.setOnClickListener(v -> {
@@ -174,7 +214,6 @@ public class CreateMeetingFragment extends Fragment {
         String place = btnSelectPlace.getText().toString().trim();
         String penaltyStr = etPenalty.getText().toString().trim();
 
-        // 필수 입력값 체크
         if (title.isEmpty() || date.isEmpty() || time.isEmpty() || place.isEmpty()) {
             Toast.makeText(getContext(), "모든 필드를 입력해주세요.", Toast.LENGTH_SHORT).show();
             return;

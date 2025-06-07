@@ -12,6 +12,8 @@ public record AppointmentResponse(
 
         String placeId,
 
+        String placeName, 
+
         LocalDateTime time,
 
         String creatorId,
@@ -28,6 +30,7 @@ public record AppointmentResponse(
             appointment.getId(),
             String.valueOf(appointment.getGroup().getId()),
             String.valueOf(appointment.getPlace().getId()),
+            appointment.getPlace().getName(),
             appointment.getTime(),
             String.valueOf(appointment.getCreatedBy().getId()),
             appointment.getCreatedAt(),

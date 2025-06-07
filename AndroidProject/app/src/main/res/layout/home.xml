@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:text="스케줄 생성"
                 android:layout_marginTop="24dp"
+                android:backgroundTint="#2196F3"
                 app:layout_constraintTop_toBottomOf="@id/cardTodayMeeting"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -75,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="스케줄 목록 보기"
                 android:layout_marginTop="16dp"
+                android:backgroundTint="#03A9F4"
                 app:layout_constraintTop_toBottomOf="@id/btnCreateMeeting"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -85,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="그룹 관리"
                 android:layout_marginTop="16dp"
+                android:backgroundTint="#4CAF50"
                 app:layout_constraintTop_toBottomOf="@id/btnMeetingList"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -95,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:text="지도 보기"
                 android:layout_marginTop="16dp"
+                android:backgroundTint="#FF9800"
                 app:layout_constraintTop_toBottomOf="@id/btnGroupManage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

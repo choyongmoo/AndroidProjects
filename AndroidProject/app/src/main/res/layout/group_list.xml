@@ -20,20 +20,20 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateGroup"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:textSize="16sp"
         android:fontFamily="sans-serif-medium"
-        android:background="@drawable/round"
+        android:backgroundTint="#34C759"
         android:text="새 그룹 만들기"
         android:layout_marginTop="16dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnBack"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="60dp"
         android:textSize="16sp"
         android:fontFamily="sans-serif-medium"
-        android:background="@drawable/round"
+        android:backgroundTint="#FF3B30"
         android:text="뒤로가기"
         android:layout_marginTop="8dp"/>
 

@@ -27,6 +27,7 @@
         android:id="@+id/btnAccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#34C759"
         android:text="수락"/>
 
     <Button
@@ -34,5 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="거절"
+        android:backgroundTint="#FF3B30"
         android:layout_marginStart="8dp"/>
 </LinearLayout>

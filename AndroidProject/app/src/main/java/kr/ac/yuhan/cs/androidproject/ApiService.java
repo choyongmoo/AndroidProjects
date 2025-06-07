@@ -7,6 +7,8 @@ import kr.ac.yuhan.cs.androidproject.dto.AppointmentRequest;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentResponse;
 import kr.ac.yuhan.cs.androidproject.dto.ArrivalLog;
 import kr.ac.yuhan.cs.androidproject.dto.CreateGroupRequest;
+import kr.ac.yuhan.cs.androidproject.dto.FindIdRequest;
+import kr.ac.yuhan.cs.androidproject.dto.FindIdResponse;
 import kr.ac.yuhan.cs.androidproject.dto.FriendAcceptDto;
 import kr.ac.yuhan.cs.androidproject.dto.FriendRequestDto;
 import kr.ac.yuhan.cs.androidproject.dto.GetUserResponse;
@@ -15,6 +17,8 @@ import kr.ac.yuhan.cs.androidproject.dto.GroupSummary;
 import kr.ac.yuhan.cs.androidproject.dto.LoginRequest;
 import kr.ac.yuhan.cs.androidproject.dto.LoginResponse;
 import kr.ac.yuhan.cs.androidproject.dto.NewPasswordRequest;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceRequest;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceResponse;
 import kr.ac.yuhan.cs.androidproject.dto.RegisterRequest;
 import kr.ac.yuhan.cs.androidproject.dto.UpdateUserRequest;
 import retrofit2.Call;
@@ -31,6 +35,9 @@ public interface ApiService {
 
     @POST("auth/register")
     Call<LoginResponse> registerUser(@Body RegisterRequest request);
+
+    @POST("auth/findid")
+    Call<FindIdResponse> findUsernameByEmail(@Body FindIdRequest request);
 
     @GET("users/{username}")
     Call<GetUserResponse> getUserInfo(@Path("username") String username);
@@ -103,4 +110,10 @@ public interface ApiService {
     // 로그인된 사용자의 약속 목록 조회
     @GET("appointments/me")
     Call<List<AppointmentResponse>> getMyAppointments();
+
+    @POST("/places")
+    Call<PlaceResponse> createOrGetPlace(@Body PlaceRequest placeRequest);
+
+    @GET("/places/{id}")
+    Call<PlaceResponse> getPlaceById(@Path("id") Long id);
 }

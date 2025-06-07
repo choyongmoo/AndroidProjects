@@ -1,5 +1,6 @@
 package kr.ac.yuhan.cs.androidproject.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import java.util.Date;
 import java.util.List;
 
 import kr.ac.yuhan.cs.androidproject.ApiService;
+import kr.ac.yuhan.cs.androidproject.MapActivity;
 import kr.ac.yuhan.cs.androidproject.R;
 import kr.ac.yuhan.cs.androidproject.RetrofitClient;
 import kr.ac.yuhan.cs.androidproject.dto.AppointmentResponse;
+import kr.ac.yuhan.cs.androidproject.dto.PlaceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,6 +71,12 @@ public class HomeFragment extends Fragment {
             transaction.replace(R.id.fragment_container, meetingFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        });
+
+        MaterialButton btnMap = rootView.findViewById(R.id.btnMap);
+        btnMap.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), MapActivity.class);
+            startActivity(intent);
         });
 
         fetchAndDisplayEarliestAppointment();
@@ -132,8 +141,29 @@ public class HomeFragment extends Fragment {
         String formattedTime = formatDateTime(appointment.getTime());
         tvNextMeetingTime.setText("시간: " + formattedTime);
 
-        // 장소 정보가 placeId로만 있음 -> 실제 장소 이름을 보여주려면 placeId -> 장소 이름 매핑 필요
-        tvNextMeetingPlace.setText("장소: " + appointment.getPlaceId());
+        // placeId → 장소 이름 매핑
+        try {
+            Long placeId = Long.parseLong(appointment.getPlaceId());
+            ApiService apiService = RetrofitClient.getApiService();
+            apiService.getPlaceById(placeId).enqueue(new Callback<PlaceResponse>() {
+                @Override
+                public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        tvNextMeetingPlace.setText("장소: " + response.body().getName());
+                    } else {
+                        tvNextMeetingPlace.setText("장소 정보를 불러올 수 없음");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PlaceResponse> call, Throwable t) {
+                    tvNextMeetingPlace.setText("장소 정보를 불러올 수 없음");
+                }
+            });
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            tvNextMeetingPlace.setText("장소 ID 오류");
+        }
     }
 
     private String formatDateTime(String dateTimeStr) {

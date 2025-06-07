@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.login_btn);
         registerText = findViewById(R.id.register);
 
-        // find_user TextView 추가 바인딩 (layout XML에 find_user 아이디 있어야 함)
         findUserText = findViewById(R.id.find_user);
 
         loginButton.setOnClickListener(v -> {
@@ -111,7 +110,6 @@ public class LoginActivity extends AppCompatActivity {
 
         registerText.setOnClickListener(v -> showRegisterDialog());
 
-        // find_user 클릭시 아이디/비밀번호 찾기 다이얼로그 띄우기
         findUserText.setOnClickListener(v -> showFindDialog());
     }
 

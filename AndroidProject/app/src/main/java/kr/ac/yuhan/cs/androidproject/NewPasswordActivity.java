@@ -40,7 +40,7 @@ public class NewPasswordActivity extends AppCompatActivity {
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "비밀번호 변경 완료", Toast.LENGTH_SHORT).show();
-                        finish(); // 로그인 화면으로 돌아가기
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "실패: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
@@ -52,5 +52,8 @@ public class NewPasswordActivity extends AppCompatActivity {
                 }
             });
         });
+
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> finish());
     }
 }

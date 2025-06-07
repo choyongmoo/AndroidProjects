@@ -102,6 +102,7 @@
             android:textSize="16sp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:inputType="textPassword"
             android:background="@drawable/round"
             app:layout_constraintTop_toBottomOf="@id/label5"
             app:layout_constraintStart_toStartOf="parent"
@@ -131,6 +132,7 @@
             android:textSize="16sp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:inputType="textPassword"
             android:background="@drawable/round"
             app:layout_constraintTop_toBottomOf="@id/label7"
             app:layout_constraintStart_toStartOf="parent"
@@ -168,30 +170,30 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register_btn"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
             android:text="@string/register_btn"
             android:textColor="#ffffff"
             android:textSize="16sp"
-            android:background="@drawable/round"
+            android:backgroundTint="#34C759"
             app:layout_constraintTop_toBottomOf="@id/label10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
             android:layout_marginTop="16dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/cancel_btn"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
             android:text="@string/register_cancel"
             android:textColor="#ffffff"
             android:textSize="16sp"
-            android:background="@drawable/round"
+            android:backgroundTint="#FF3B30"
             app:layout_constraintTop_toBottomOf="@id/label10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintHorizontal_bias="0.9"
             android:layout_marginTop="16dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

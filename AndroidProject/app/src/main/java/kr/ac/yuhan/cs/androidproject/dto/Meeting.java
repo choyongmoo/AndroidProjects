@@ -7,15 +7,22 @@ public class Meeting {
     private String location;
     private String groupId;
     private int penalty;
+    private long placeId;
+
+    private double latitude;
+    private double longitude;
 
     // id도 포함해서 생성자 수정
-    public Meeting(long id, String title, String time, String location, String groupId, int penalty) {
+    public Meeting(long id, String title, String time, String location,
+                   String groupId, int penalty, double latitude, double longitude) {
         this.id = id;
         this.title = title;
         this.time = time;
         this.location = location;
         this.groupId = groupId;
         this.penalty = penalty;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public long getId() {
@@ -41,4 +48,17 @@ public class Meeting {
     public int getPenalty() {
         return penalty;
     }
+
+    public long getPlaceId() {           // 👉 placeId getter 추가
+        return placeId;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
 }

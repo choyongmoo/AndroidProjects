@@ -1,9 +1,0 @@
-DetailMeetingFragment - 장소보기 동작 구현
-CreateMeetingFragment - 지도기능 db랑 연동
-HomeFragment에 displayAppointment 장소 연동
-
-약속 수정에서 지도도 수정 가능하게 바꾸고
-약속 상세 내역에서 지도 보기 누르면 약속 장소 지도 나오게 하고
-그 화면에서 공유랑 뒤로가기 버튼 있는데
-공유 버튼 누르면 내 위치 공유 되게하고
-한번 더 누르면 내 위치 공유 꺼지게 하기

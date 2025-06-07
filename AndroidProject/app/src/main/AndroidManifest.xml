@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -18,7 +20,13 @@
         android:name=".MyApp"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDnQRzK6J7hXF5k-ZFukiHyA-L2YJ0J_b0" />
+
         <activity android:name=".MainActivity" />
+        <activity android:name=".MapActivity" />
+        <activity android:name=".PlaceSelectionActivity" />
 
         <activity
             android:name=".LoginActivity"

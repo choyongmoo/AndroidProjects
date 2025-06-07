@@ -42,7 +42,6 @@ public class DetailMeetingFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.detail_meeting, container, false);
-
     }
 
     @Override
@@ -61,8 +60,24 @@ public class DetailMeetingFragment extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
 
         btnPlaceView.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "장소보기 클릭됨", Toast.LENGTH_SHORT).show();
-            // TODO: 장소 보기 동작 구현
+            double lat = getArguments() != null ? getArguments().getDouble("latitude", 0.0) : 0.0;
+            double lng = getArguments() != null ? getArguments().getDouble("longitude", 0.0) : 0.0;
+            String placeName = tvPlace.getText().toString().replace("장소: ", "");
+
+            Bundle bundle = new Bundle();
+            bundle.putDouble("latitude", lat);
+            bundle.putDouble("longitude", lng);
+            bundle.putString("placeName", placeName);
+
+
+            PlaceViewFragment placeViewFragment = new PlaceViewFragment();
+            placeViewFragment.setArguments(bundle);
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, placeViewFragment)
+                    .addToBackStack(null)
+                    .commit();
         });
 
         btnEditInviteDelete.setOnClickListener(v -> {
@@ -80,6 +95,7 @@ public class DetailMeetingFragment extends Fragment {
                                 bundle.putString("place", tvPlace.getText().toString().replace("장소: ", ""));
                                 bundle.putInt("penalty", Integer.parseInt(tvPenalty.getText().toString().replace("벌금: ", "").replace("원", "").replace(",", "")));
                                 bundle.putLong("groupId", getArguments() != null ? getArguments().getLong("groupId", -1L) : -1L);
+                                bundle.putLong("placeId", getArguments() != null ? getArguments().getLong("placeId", -1L) : -1L);
 
                                 EditAppointmentFragment editFragment = new EditAppointmentFragment();
                                 editFragment.setArguments(bundle);
@@ -115,8 +131,6 @@ public class DetailMeetingFragment extends Fragment {
                                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                                     if (response.isSuccessful()) {
                                                         Toast.makeText(getContext(), "약속이 삭제되었습니다", Toast.LENGTH_SHORT).show();
-
-                                                        // 약속 목록 화면으로 돌아가기
                                                         requireActivity().getSupportFragmentManager()
                                                                 .beginTransaction()
                                                                 .replace(R.id.fragment_container, new MeetingFragment())
@@ -250,6 +264,7 @@ public class DetailMeetingFragment extends Fragment {
         tv.setTextSize(16);
         participantContainer.addView(tv);
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -261,3 +276,4 @@ public class DetailMeetingFragment extends Fragment {
         }
     }
 }
+

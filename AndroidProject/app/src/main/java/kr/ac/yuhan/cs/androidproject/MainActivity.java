@@ -63,19 +63,27 @@ public class MainActivity extends AppCompatActivity {
         userNameTop.setText(displayName);
         userNameNav.setText(displayName);
 
+        TextView navHome = findViewById(R.id.nav_home);             // 새로 추가한 홈으로 메뉴
         TextView navProfile = findViewById(R.id.nav_profile);
         TextView navAddFriend = findViewById(R.id.nav_add_friend);
         TextView navFriendList = findViewById(R.id.nav_friend_list);
         TextView navLogout = findViewById(R.id.nav_logout);
 
+        navHome.setOnClickListener(v -> {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
         navProfile.setOnClickListener(v -> {
-            // InfoFragment로 전환
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new InfoFragment())
                     .commit();
 
-            // 사이드 메뉴 닫기
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
@@ -102,15 +110,13 @@ public class MainActivity extends AppCompatActivity {
             editor.clear();
             editor.apply();
 
-            // 로그인 화면으로 이동
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
+
             drawerLayout.closeDrawer(GravityCompat.START);
             Toast.makeText(this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
         });
-
-
     }
 
 }
