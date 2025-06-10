@@ -22,6 +22,7 @@ public class JwtTokenProvider {
     public String generateToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("role", user.getRole().name());
+        claims.put("userId", user.getId());  // 👉 userId 포함
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -34,9 +35,9 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -59,5 +60,14 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role", String.class);
+    }
+
+    public Long getUserId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
     }
 }

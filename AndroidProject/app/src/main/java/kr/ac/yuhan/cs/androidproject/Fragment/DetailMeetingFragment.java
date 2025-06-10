@@ -64,11 +64,13 @@ public class DetailMeetingFragment extends Fragment {
             double lng = getArguments() != null ? getArguments().getDouble("longitude", 0.0) : 0.0;
             String placeName = tvPlace.getText().toString().replace("장소: ", "");
 
+            long appointmentId = getArguments() != null ? getArguments().getLong("appointmentId", -1L) : -1L;
+
             Bundle bundle = new Bundle();
             bundle.putDouble("latitude", lat);
             bundle.putDouble("longitude", lng);
             bundle.putString("placeName", placeName);
-
+            bundle.putLong("appointmentId", appointmentId); // 🔥 반드시 포함해야 다른 유저 위치 마커 불러올 수 있음
 
             PlaceViewFragment placeViewFragment = new PlaceViewFragment();
             placeViewFragment.setArguments(bundle);

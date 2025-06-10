@@ -20,13 +20,18 @@ import kr.ac.yuhan.cs.androidproject.dto.NewPasswordRequest;
 import kr.ac.yuhan.cs.androidproject.dto.PlaceRequest;
 import kr.ac.yuhan.cs.androidproject.dto.PlaceResponse;
 import kr.ac.yuhan.cs.androidproject.dto.RegisterRequest;
+import kr.ac.yuhan.cs.androidproject.dto.SharedLocation;
 import kr.ac.yuhan.cs.androidproject.dto.UpdateUserRequest;
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -46,7 +51,11 @@ public interface ApiService {
     Call<Void> resetPassword(@Body NewPasswordRequest request);
 
     @PUT("users/{username}")
-    Call<Void> updateUser(@Path("username") String username, @Body UpdateUserRequest request );
+    Call<Void> updateUser(@Path("username") String username, @Body UpdateUserRequest request);
+
+    @Multipart
+    @POST("users/{username}/upload-profile")
+    Call<ResponseBody> uploadProfileImage(@Path("username") String username, @Part MultipartBody.Part file);
 
     // 1. 친구 요청 보내기
     @POST("friends/request")
@@ -116,4 +125,10 @@ public interface ApiService {
 
     @GET("/places/{id}")
     Call<PlaceResponse> getPlaceById(@Path("id") Long id);
+
+    @POST("/api/location/share")
+    Call<Void> uploadSharedLocation(@Body SharedLocation location);
+
+    @GET("/api/location/shared/{appointmentId}")
+    Call<List<SharedLocation>> getSharedLocations(@Path("appointmentId") long appointmentId);
 }

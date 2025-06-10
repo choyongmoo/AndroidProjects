@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +44,7 @@ public class CreateMeetingFragment extends Fragment {
 
     private EditText etTitle, etPenalty;
     private MaterialButton btnDate, btnTime, btnSelectPlace;
-    private RadioGroup rgRewardType;
+//    private RadioGroup rgRewardType;
     private MaterialButton confirmBtn, cancelBtn;
     private Spinner spinnerGroup;
 
@@ -102,7 +101,7 @@ public class CreateMeetingFragment extends Fragment {
         btnTime = view.findViewById(R.id.btnTime);
         btnSelectPlace = view.findViewById(R.id.btnSelectPlace);
         etPenalty = view.findViewById(R.id.etPenalty);
-        rgRewardType = view.findViewById(R.id.rgReward);
+//        rgRewardType = view.findViewById(R.id.rgReward);
         confirmBtn = view.findViewById(R.id.confirmBtn);
         cancelBtn = view.findViewById(R.id.cancelBtn);
         spinnerGroup = view.findViewById(R.id.spinnerGroup);
@@ -226,10 +225,10 @@ public class CreateMeetingFragment extends Fragment {
             penalty = 0;
         }
 
-        int selectedRewardId = rgRewardType.getCheckedRadioButtonId();
-        if (selectedRewardId == R.id.rbNone) {
-            penalty = 0;
-        }
+//        int selectedRewardId = rgRewardType.getCheckedRadioButtonId();
+//        if (selectedRewardId == R.id.rbNone) {
+//            penalty = 0;
+//        }
 
         String dateTimeStr = date + "T" + time + ":00";
 

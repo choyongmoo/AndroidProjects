@@ -6,6 +6,7 @@ public class UpdateUserRequest {
     private String password;
     private String profileImageUrl;
 
+    public UpdateUserRequest(){}
     public UpdateUserRequest(String email, String password, String displayName, String profileImageUrl) {
         this.email = email;
         this.password= password;

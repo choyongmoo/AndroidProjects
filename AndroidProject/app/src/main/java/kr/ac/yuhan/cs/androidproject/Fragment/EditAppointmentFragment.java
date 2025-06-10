@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,8 +45,8 @@ public class EditAppointmentFragment extends Fragment {
     private EditText etTitle, etPenalty;
     private Spinner spinnerGroup;
     private MaterialButton btnDate, btnTime, btnSelectPlace, confirmBtn, cancelBtn;
-    private RadioGroup rgReward;
-    private RadioButton rbWinnerTakesAll, rbSplit, rbNone;
+//    private RadioGroup rgReward;
+//    private RadioButton rbWinnerTakesAll, rbSplit, rbNone;
 
     private Calendar selectedDateTime = Calendar.getInstance();
     private Long appointmentId;
@@ -95,10 +93,10 @@ public class EditAppointmentFragment extends Fragment {
         btnSelectPlace = view.findViewById(R.id.btnSelectPlace);
         confirmBtn = view.findViewById(R.id.confirmBtn);
         cancelBtn = view.findViewById(R.id.cancelBtn);
-        rgReward = view.findViewById(R.id.rgReward);
-        rbWinnerTakesAll = view.findViewById(R.id.rbWinnerTakesAll);
-        rbSplit = view.findViewById(R.id.rbSplit);
-        rbNone = view.findViewById(R.id.rbNone);
+//        rgReward = view.findViewById(R.id.rgReward);
+//        rbWinnerTakesAll = view.findViewById(R.id.rbWinnerTakesAll);
+//        rbSplit = view.findViewById(R.id.rbSplit);
+//        rbNone = view.findViewById(R.id.rbNone);
     }
 
     private void setupListeners() {
@@ -163,7 +161,7 @@ public class EditAppointmentFragment extends Fragment {
 
         btnSelectPlace.setText(appointment.getPlaceName());
         selectedPlaceId = Long.parseLong(appointment.getPlaceId());
-        rbNone.setChecked(true);
+//        rbNone.setChecked(true);
     }
 
     private void loadGroupList() {
