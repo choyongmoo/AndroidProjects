@@ -19,5 +19,5 @@ public class GroupAppointmentController {
     public ResponseEntity<List<AppointmentResponse>> getAppointmentsByGroup(@PathVariable Long groupId) {
         List<AppointmentResponse> appointments = appointmentService.getAppointmentsByGroupId(groupId);
         return ResponseEntity.ok(appointments);
-    }
+    } 
 }

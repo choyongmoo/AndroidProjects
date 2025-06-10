@@ -95,12 +95,12 @@ public class AppointmentController {
         return ResponseEntity.ok().build();
     }
 
-    //사용자 id로 약속 찾기
+        //사용자 id로 약속 찾기
     @GetMapping("/me")
     public ResponseEntity<List<AppointmentResponse>> getMyAppointments(
             @AuthenticationPrincipal SecurityUserDetails currentUser) {
 
         List<AppointmentResponse> appointments = appointmentService.getAppointmentsForUser(currentUser.getUser());
         return ResponseEntity.ok(appointments);
-}
+    } 
 }

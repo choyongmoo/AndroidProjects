@@ -6,9 +6,9 @@ public record GetUserResponse(
 
         String username,
 
-        String email,
-
         String displayName,
+
+        String email,
 
         //이거 추가해줬어~~
         String profileImageUrl, 

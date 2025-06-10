@@ -77,7 +77,7 @@ public class GroupService {
 
     // 그룹 목록 보기
     public List<GroupResponse> getGroupsForUser(User user) {
-        List<Group> groups = groupRepository.findByCreatedBy(user);
+        List<Group> groups = groupMemberRepository.findGroupsByUser(user);
 
         return groups.stream()
                 .map(g -> new GroupResponse(g.getId(), g.getGroupName()))

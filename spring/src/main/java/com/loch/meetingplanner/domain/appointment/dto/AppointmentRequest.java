@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 
 public record AppointmentRequest(
+        
 
         @NotBlank String title,
 

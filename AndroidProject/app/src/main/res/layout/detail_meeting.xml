@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA">
+
+    <!-- 상단 제목 -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="제목"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#222222"
+        android:paddingBottom="12dp"/>
+
+    <!-- 구분선 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#DDDDDD"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 날짜/시간 -->
+    <TextView
+        android:id="@+id/tvDateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="시간"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:paddingVertical="6dp"/>
+
+    <!-- 벌금 -->
+    <TextView
+        android:id="@+id/tvPenalty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="벌금"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:paddingVertical="6dp"/>
+
+    <!-- 그룹명 -->
+    <TextView
+        android:id="@+id/tvGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:paddingVertical="6dp"/>
+
+    <!-- 장소 -->
+    <TextView
+        android:id="@+id/tvPlace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="장소"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:paddingBottom="12dp"/>
+
+    <!-- 참여자 제목 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="참여자"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#333333"
+        android:paddingBottom="8dp"/>
+
+    <!-- 참여자 목록 컨테이너 -->
+    <LinearLayout
+        android:id="@+id/participantContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="12dp"
+        android:background="#FFFFFF"
+        android:padding="12dp"
+        android:elevation="2dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical"/>
+
+    <!-- 버튼 3개 하단 컨테이너 -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:weightSum="3"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="middle">
+
+        <Button
+            android:id="@+id/btnPlaceView"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:text="장소보기"
+            android:layout_weight="1"
+            android:backgroundTint="#0A84FF"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnEditInviteDelete"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:text="수정/초대/삭제"
+            android:layout_weight="1"
+            android:backgroundTint="#FF9500"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#FF3B30"
+            android:text="뒤로가기"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</LinearLayout>

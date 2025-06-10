@@ -13,8 +13,6 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -58,4 +56,11 @@ public class FriendController {
         List<GetUserResponse> friends = friendService.getFriends(currentUser.getUser());
         return ResponseEntity.ok(friends);
     }
+
+    @GetMapping("/requests")    //추가
+    public ResponseEntity<List<GetUserResponse>> getFriendRequests(
+            @AuthenticationPrincipal SecurityUserDetails currentUser) {
+        List<GetUserResponse> requests = friendService.getPendingRequests(currentUser.getUser());
+        return ResponseEntity.ok(requests);
+}
 }

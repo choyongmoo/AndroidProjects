@@ -1,5 +1,8 @@
 package com.loch.meetingplanner.domain.user.service;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
 import com.loch.meetingplanner.domain.user.dto.GetUserResponse;
@@ -15,6 +19,9 @@ import com.loch.meetingplanner.domain.user.model.LiveLocation;
 import com.loch.meetingplanner.domain.user.model.User;
 import com.loch.meetingplanner.domain.user.repository.LiveLocationRepository;
 import com.loch.meetingplanner.domain.user.repository.UserRepository;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.UUID;
 
 import jakarta.transaction.Transactional;
 
@@ -40,8 +47,8 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(user -> new GetUserResponse(
                         user.getUsername(),
-                        user.getEmail(),
                         user.getDisplayName(),
+                        user.getEmail(),
                         user.getProfileImageUrl(),
                         user.getCreatedAt(),
                         user.getUpdatedAt()))
@@ -61,8 +68,8 @@ public class UserService {
 
         return new GetUserResponse(
                 user.getUsername(),
-                user.getEmail(),
                 user.getDisplayName(),
+                user.getEmail(),
                 user.getProfileImageUrl(),
                 user.getCreatedAt(),
                 user.getUpdatedAt());
@@ -97,9 +104,13 @@ public class UserService {
 
         //이거 추가해줬어~~
         String newProfileImageUrl = request.profileImageUrl();
-        if (newProfileImageUrl != null && !newProfileImageUrl.isBlank()) {
+        if (newProfileImageUrl != null) {
+        if (newProfileImageUrl.isBlank()) {
+            user.setProfileImageUrl(null);
+        } else {
             user.setProfileImageUrl(newProfileImageUrl);
         }
+    }
 
         userRepository.save(user);
     }
@@ -132,4 +143,42 @@ public class UserService {
 
         liveLocationRepository.save(newLocation);
     }
+     // 이메일로 username 조회
+    public String findUsernameByEmail(String email) {
+        return userRepository.findByEmail(email)
+            .map(User::getUsername)
+            .orElseThrow(() -> new IllegalArgumentException("해당 이메일로 등록된 사용자가 없습니다."));
+    }
+    @Transactional
+    public String saveProfileImage(String username, MultipartFile file, User currentUser) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        if (!user.getUsername().equals(currentUser.getUsername())) {
+            throw new AccessDeniedException("You are not allowed to upload image for this user");
+        }
+
+        try {
+            // 이미지 저장 경로 설정
+            String uploadDir = "uploads/profiles/" + username;
+            Files.createDirectories(Paths.get(uploadDir));
+
+            // 고유한 파일 이름 생성
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir, filename);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // 저장된 이미지 URL 생성 (정적 파일 접근 경로)
+            String imageUrl = "/static/profiles/" + username + "/" + filename;
+
+            // DB에 경로 저장
+            user.setProfileImageUrl(imageUrl);
+            userRepository.save(user);
+
+            return imageUrl;
+        } catch (IOException e) {
+            throw new RuntimeException("프로필 이미지 저장 실패", e);
+        }
+    }
 }
+

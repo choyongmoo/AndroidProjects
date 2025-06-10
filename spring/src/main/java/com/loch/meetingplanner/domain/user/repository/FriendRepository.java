@@ -31,4 +31,5 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     // 친구 관계 존재 여부 (양방향 체크는 서비스에서 2번 호출)
     boolean existsByUserAndFriendAndStatus(User user, User friend, FriendStatus status);
+    
 }

@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS group_members CASCADE;
 DROP TABLE IF EXISTS group_places CASCADE;
 DROP TABLE IF EXISTS live_locations CASCADE;
 DROP TABLE IF EXISTS penalties CASCADE;
+DROP TABLE IF EXISTS shared_location CASCADE;
 
 
 -- TABLE: sample
@@ -115,4 +116,13 @@ CREATE TABLE live_locations (
     lng        DOUBLE PRECISION NOT NULL,
     update_at  TIMESTAMP DEFAULT NOW(),
     CONSTRAINT fk_live_locations_users FOREIGN KEY (user_id) REFERENCES users (id)
+);
+CREATE TABLE IF NOT EXISTS shared_location (
+    id BIGSERIAL PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    appointment_id BIGINT NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    is_sharing BOOLEAN NOT NULL,
+    updated_at TIMESTAMP DEFAULT NOW()
 );

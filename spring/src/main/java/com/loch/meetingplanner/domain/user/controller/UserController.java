@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.loch.meetingplanner.config.security.SecurityUserDetails;
 import com.loch.meetingplanner.domain.user.dto.UpdateUserRequest;
@@ -50,7 +52,7 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PutMapping("/{username}") //사용자 정보 수정
+    @PutMapping("/{username}") //사용자 정보 수정(로그인 해야지 쓸 수 있음 한 마디로 jwt 인증된 사람만 정보수정이 가능하다!)
     public ResponseEntity<Void> updateUser(
             @PathVariable String username,
             @Valid @RequestBody UpdateUserRequest request,
@@ -77,5 +79,15 @@ public class UserController {
 
         userService.updateUserLocation(username, request, currentUser.getUser());
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{username}/upload-profile")
+    public ResponseEntity<String> uploadProfileImage(
+            @PathVariable String username,
+            @RequestParam("file") MultipartFile file,
+            @AuthenticationPrincipal SecurityUserDetails currentUser) {
+
+        String imageUrl = userService.saveProfileImage(username, file, currentUser.getUser());
+        return ResponseEntity.ok(imageUrl);
     }
 }

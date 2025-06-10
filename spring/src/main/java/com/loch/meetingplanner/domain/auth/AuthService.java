@@ -76,6 +76,7 @@ public class AuthService {
         }
     }
 
+    @Transactional
     public void newPassword(NewPasswordRequest request) {
         User user = userRepository.findByUsername(request.username())
                 .filter(u -> u.getEmail().equals(request.email()))

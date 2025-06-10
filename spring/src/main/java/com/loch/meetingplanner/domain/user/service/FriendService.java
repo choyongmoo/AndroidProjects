@@ -74,7 +74,7 @@ public class FriendService {
                 .stream()
                 .map(f -> {
                     User friend = f.getFriend();
-                    return new GetUserResponse(friend.getUsername(), friend.getDisplayName(),friend.getProfileImageUrl(), friend.getEmail(),
+                    return new GetUserResponse(friend.getUsername(), friend.getDisplayName(), friend.getEmail(), friend.getProfileImageUrl(),
                             friend.getCreatedAt(), friend.getUpdatedAt());
                 })
                 .toList();
@@ -85,4 +85,21 @@ public class FriendService {
                 || friendRepository.existsByUserAndFriendAndStatus(user2, user1, FriendStatus.ACCEPTED);
     }
 
+    //용무 추가
+    public List<GetUserResponse> getPendingRequests(User user) {
+    return friendRepository.findByFriendAndStatus(user, FriendStatus.PENDING)
+            .stream()
+            .map(f -> {
+                User requester = f.getUser();  // 친구 요청을 보낸 사람
+                return new GetUserResponse(
+                        requester.getUsername(),
+                        requester.getDisplayName(),
+                        requester.getEmail(),
+                        requester.getProfileImageUrl(),
+                        requester.getCreatedAt(),
+                        requester.getUpdatedAt()
+                );
+            })
+            .toList();
+}
 }
