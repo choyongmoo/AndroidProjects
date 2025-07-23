@@ -1,0 +1,12 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvMemberName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:text="멤버 이름"
+    android:textSize="18sp"
+    android:textColor="#333333"
+    android:textStyle="bold"
+    android:fontFamily="sans-serif-medium"
+    android:background="@drawable/bg_member_name"
+    android:layout_marginVertical="4dp" />
